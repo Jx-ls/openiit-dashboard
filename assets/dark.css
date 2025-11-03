@@ -1,0 +1,9 @@
+:root {
+    --red: #E50914;
+    --black: #0F0F0F;
+    --white: #FFFFFF;
+}
+
+.tab-icon, .theme-switcher-icon {
+    filter: invert(1) grayscale(100%) brightness(100%);
+}

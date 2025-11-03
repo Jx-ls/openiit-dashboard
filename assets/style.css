@@ -1,0 +1,45 @@
+:root {
+    --red: #E50914;
+    --black: #0F0F0F;
+    --white: #FFFFFF;
+}
+
+html {
+    background-color: var(--black);
+}
+
+h1, h2, h3, p {
+    color: var(--white);
+}
+
+.tab-icon.active {
+    filter: invert(13%) sepia(99%) saturate(4000%) hue-rotate(345deg) brightness(100%) contrast(150%);
+}
+
+.tab-icon, .theme-switcher-icon {
+    filter: invert(1) grayscale(100%) brightness(100%);
+}
+
+.tab-icon:hover {
+    filter: invert(13%) sepia(99%) saturate(4000%) hue-rotate(345deg) brightness(100%) contrast(150%);
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+}
+
+.nav-icons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0px 32px 32px 10px;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
