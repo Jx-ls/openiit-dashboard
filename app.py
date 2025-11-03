@@ -3,13 +3,13 @@ from dash import dcc, html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 
-# Initialize the Dash app
-app = dash.Dash(__name__, external_stylesheets=['/assets/style.css']) # Link base styles
+app = dash.Dash(__name__, 
+                external_stylesheets=['/assets/style.css'],
+                title='Team Sigmoid')
 
 app.layout = dbc.Container([
 
     html.Div(id='theme-output-link', children=[
-        # Default to the dark theme stylesheet on initial load
         html.Link(rel='stylesheet', href='/assets/dark.css', id='theme-link')
     ], style={'display': 'none'}),
 
@@ -41,9 +41,7 @@ app.layout = dbc.Container([
     dcc.Store(id='current-theme', data='dark'),
 ], fluid=True, className="dashboard-container")
 
-# Dynamically create the list of 7 Outputs for the className property of each tab icon
 tab_icon_outputs = [Output(f'tab-icon-{i}', 'className') for i in range(1, 8)]
-# Dynamically create the list of 7 Inputs for the n_clicks property of each tab icon
 tab_icon_inputs = [Input(f'tab-icon-{i}', 'n_clicks') for i in range(1, 8)]
 
 @app.callback(
@@ -51,36 +49,24 @@ tab_icon_inputs = [Input(f'tab-icon-{i}', 'n_clicks') for i in range(1, 8)]
     tab_icon_inputs,
 )
 def update_active_tab_style(*args):
-    """
-    Sets the 'active' class on the currently clicked tab icon and removes it from all others.
-    Defaults to setting 'tab-icon-1' as active on initial load.
-    """
+    
     ctx = dash.callback_context
     triggered_id = ctx.triggered_id
     
     base_class = 'tab-icon'
     new_class_names = []
     
-    # Iterate through all 7 tabs to determine their new class name
     for i in range(1, 8):
         icon_id = f'tab-icon-{i}'
         
-        # 1. Initial Load: If nothing is triggered, and it's tab 1, set it active.
         if not triggered_id and i == 1:
             new_class_names.append(f'{base_class} active')
-        # 2. Clicked Tab: If this icon's ID matches the triggered ID, set it active.
         elif triggered_id == icon_id:
             new_class_names.append(f'{base_class} active')
-        # 3. Inactive Tabs: All others are just the base class.
         else:
             new_class_names.append(base_class)
             
-    # The list returned corresponds sequentially to the list of 7 Outputs
     return new_class_names
-
-
-# --- EXISTING CALLBACK TO RENDER PAGE CONTENT ---
-
 
 @app.callback(
     Output('page-content', 'children'),
@@ -177,7 +163,7 @@ def render_page_content(*args):
                 ]
             )
         ])
-    return html.H2("Welcome to the Dashboard!")
+    return html.H2("Hello World")
 
 @app.callback(
     Output('current-theme', 'data'),
