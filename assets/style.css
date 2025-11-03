@@ -4,8 +4,9 @@
     --white: #FFFFFF;
 }
 
-html {
+html, body {
     background-color: var(--black);
+    margin: 0px;
 }
 
 h1, h2, h3, p {
