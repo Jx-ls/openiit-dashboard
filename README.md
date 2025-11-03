@@ -1,7 +1,9 @@
 # Team Sigmoid
 ### Open IIT Data Analytics Hackathon: Problem Statement - 3
 # Dashboard
-
+## Live Demo
+You can view the live, hosted version of this dashboard here:
+[Team Sigmoid](https://team-sigmoid-dashboard.onrender.com/)
 ## Setup
 ### Clone the repository
 ```bash
