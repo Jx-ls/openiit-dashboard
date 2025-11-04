@@ -2,6 +2,7 @@ import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+from tabs import content, creator_talent, exec_overview, genre_intelligence, geo_insights, strat_recom, trend
 
 app = dash.Dash(__name__, 
                 external_stylesheets=['/assets/style.css'],
@@ -9,12 +10,16 @@ app = dash.Dash(__name__,
 
 app.layout = dbc.Container([
 
+    # themer
     html.Div(id='theme-output-link', children=[
         html.Link(rel='stylesheet', href='/assets/dark.css', id='theme-link')
     ], style={'display': 'none'}),
 
+    # page container
     html.Div(
-        children=[        
+        children=[     
+
+            # navbar   
             html.Div(
                 children=[
                     html.Div(style={'height': '1px'}),
@@ -34,6 +39,8 @@ app.layout = dbc.Container([
                 ],
                 className='nav-icons',
             ),
+
+            # page-content
             html.Div(id='page-content'),
         ],
         className='container'
@@ -41,6 +48,8 @@ app.layout = dbc.Container([
     dcc.Store(id='current-theme', data='dark'),
 ], fluid=True, className="dashboard-container")
 
+
+# hover over nav items
 tab_icon_outputs = [Output(f'tab-icon-{i}', 'className') for i in range(1, 8)]
 tab_icon_inputs = [Input(f'tab-icon-{i}', 'n_clicks') for i in range(1, 8)]
 
@@ -68,6 +77,8 @@ def update_active_tab_style(*args):
             
     return new_class_names
 
+
+# nav router
 @app.callback(
     Output('page-content', 'children'),
     [Input('tab-icon-1', 'n_clicks'),
@@ -87,84 +98,23 @@ def render_page_content(*args):
         tab_id = ctx.triggered_id.replace('tab-icon-', '')
 
     if tab_id == '1':
-        return html.Div([
-            html.H1(
-                children=[
-                    html.Span("E", style={'color': 'var(--red)'}),
-                    "xecutive ",
-                    html.Span("O", style={'color': 'var(--red)'}),
-                    "verview"
-                ]
-            )
-        ])
+        return exec_overview.layout
     elif tab_id == '2':
-        return html.Div([
-            html.H1(
-                children=[
-                    html.Span("C", style={'color': 'var(--red)'}),
-                    "ontent ",
-                    html.Span("E", style={'color': 'var(--red)'}),
-                    "xplorer"
-                ]
-            )
-        ])
+        return content.layout
     elif tab_id == '3':
-        return html.Div([
-            html.H1(
-                children=[
-                    html.Span("T", style={'color': 'var(--red)'}),
-                    "rend ",
-                    html.Span("I", style={'color': 'var(--red)'}),
-                    "ntelligence"
-                ]
-            )
-        ])
+        return trend.layout
     elif tab_id == '4':
-        return html.Div([
-            html.H1(
-                children=[
-                    html.Span("G", style={'color': 'var(--red)'}),
-                    "eographic ",
-                    html.Span("I", style={'color': 'var(--red)'}),
-                    "nsights"
-                ]
-            )
-        ])
+        return geo_insights.layout
     elif tab_id == '5':
-        return html.Div([
-            html.H1(
-                children=[
-                    html.Span("G", style={'color': 'var(--red)'}),
-                    "enre and ",
-                    html.Span("C", style={'color': 'var(--red)'}),
-                    "ategory Intelligence"
-                ]
-            )
-        ])
+        return genre_intelligence.layout
     elif tab_id == '6':
-        return html.Div([
-            html.H1(
-                children=[
-                    html.Span("C", style={'color': 'var(--red)'}),
-                    "reator and ",
-                    html.Span("T", style={'color': 'var(--red)'}),
-                    "alent Hub"
-                ]
-            )
-        ])
+        return creator_talent.layout
     elif tab_id == '7':
-        return html.Div([
-            html.H1(
-                children=[
-                    html.Span("S", style={'color': 'var(--red)'}),
-                    "trategic ",
-                    html.Span("R", style={'color': 'var(--red)'}),
-                    "ecommendations"
-                ]
-            )
-        ])
-    return html.H2("Hello World")
+        return strat_recom.layout
+    return html.H2("Error, Please reload.")
 
+
+# theme switcher
 @app.callback(
     Output('current-theme', 'data'),
     Output('theme-link', 'href'),
