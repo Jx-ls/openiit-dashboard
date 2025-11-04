@@ -44,3 +44,52 @@ h1, h2, h3, p {
     flex-direction: column;
     gap: 32px;
 }
+
+/* exec overview */
+
+.exec-overview  {
+    display: flex;
+    flex-direction: column;
+}
+
+/* content explorer */
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* trend intelligence */
+
+.trend {
+    display: flex;
+    flex-direction: column;
+}
+
+/* geographic insights */
+
+.geo-insights {
+    display: flex;
+    flex-direction: column;
+}
+
+/* genre and category intelligence */
+
+.genre-int {
+    display: flex;
+    flex-direction: column;
+}
+
+/* creator and talent hub */
+
+.creator-talent {
+    display: flex;
+    flex-direction: column;
+}
+
+/* strategic recommendations */
+
+.strat-recom {
+    display: flex;
+    flex-direction: column;
+}
