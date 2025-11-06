@@ -6,7 +6,8 @@ from tabs import content, creator_talent, exec_overview, genre_intelligence, geo
 
 app = dash.Dash(__name__, 
                 external_stylesheets=['/assets/style.css'],
-                title='Team Sigmoid')
+                title='Team Sigmoid',
+                suppress_callback_exceptions=True)
 
 app.layout = dbc.Container([
 

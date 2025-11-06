@@ -294,6 +294,7 @@ fig_genre_bar.update_layout(
 )
 
 # ---- LAYOUT ----
+# ---- LAYOUT ----
 layout = html.Div(
     children=[
         html.H1(
@@ -310,7 +311,7 @@ layout = html.Div(
                 'fontWeight': '700',
                 'fontSize': '2.5rem',
                 'marginBottom': '10px',
-                'marginTop':0,
+                'marginTop': 0,
                 'padding': 0
             }
         ),
@@ -326,157 +327,256 @@ layout = html.Div(
         html.Div(
             [
                 html.Div(
+    [
+        html.P(
+            "KPIs (Key Performance Indicators)",
+            style={
+                'textAlign': 'center',
+                'font-size': '1.3rem',
+                'font-weight': 'bold',
+                'marginBottom': '20px'
+            }
+        ),
+
+        # KPI Tiles Container
+        html.Div(
+            [
+                # --- Titles ---
+                html.Div(
                     [
-                        html.P(
-                            "KPIs(Key Performance Indicators)",
-                            style={
-                                'textAlign': 'center',
-                                'font-size': '1.2rem',
-                                'font-weight': 'bold'
-                            }
-                        ),
-                        html.Div(
-                            [
-                            html.Div(
-                            [
-                                html.P(
-                                f'{titles}',# No of titles
-                                style={
-                                    'textAlign': 'center',
-                                    'font-size': '2rem',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                                html.P(
-                                'Titles',
-                                style={
-                                    'textAlign': 'center',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                            ],
-                            style={
-                                'display': 'flex',
-                                'flex-direction': 'column'
-                            }
-                            ),
-                            html.Div(
-                            [
-                                html.P(
-                                f'{CAGR:.2f} %',
-                                style={
-                                    'textAlign': 'center',
-                                    'font-size': '2rem',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                                html.P(
-                                'CAGR',
-                                style={
-                                    'textAlign': 'center',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                            ],
-                            style={
-                                'display': 'flex',
-                                'flex-direction': 'column'
-                            }
-                            ),
-                            html.Div(
-                            [
-                                html.P(
-                                f'{countries}',
-                                style={
-                                    'textAlign': 'center',
-                                    'font-size': '2rem',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                                html.P(
-                                'Countries',
-                                style={
-                                    'textAlign': 'center',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                            ],
-                            style={
-                                'display': 'flex',
-                                'flex-direction': 'column'
-                            }
-                            ),
-                            html.Div(
-                            [
-                                html.P(
-                                f'{genres}',
-                                style={
-                                    'textAlign': 'center',
-                                    'font-size': '2rem',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                                html.P(
-                                'Genres',
-                                style={
-                                    'textAlign': 'center',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                            ],
-                            style={
-                                'display': 'flex',
-                                'flex-direction': 'column'
-                            }
-                            ),
-                            html.Div(
-                            [
-                                html.P(
-                                f'{shannon_index: .2f}',
-                                style={
-                                    'textAlign': 'center',
-                                    'font-size': '2rem',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                                html.P(
-                                'Shannon Diversity index',
-                                style={
-                                    'textAlign': 'center',
-                                    'padding': 0,
-                                    'margin': 0
-                                }
-                                ),
-                            ],
-                            style={
-                                'display': 'flex',
-                                'flex-direction': 'column'
-                            }
-                            ),
-                            ],
-                            style={
-                                'display': 'flex',
-                                'justify-content': 'space-between',
-                                'align-items': 'center',
-                                'gap': '0.1rem',
-                                'flex-wrap': 'wrap'
-                            }
+                        html.P(f'{titles}', style={
+                            'textAlign': 'center',
+                            'font-size': '2rem',
+                            'margin': '0'
+                        }),
+                        html.P('Titles', style={
+                            'textAlign': 'center',
+                            'margin': '0 0 10px 0'
+                        }),
+                        dcc.Graph(
+                            figure=px.area(
+                                year_counts,
+                                x='Release Year', y='Count',
+                                height=100, width=200,
+                                color_discrete_sequence=['#E50914']
+                            ).update_layout(
+                                margin=dict(l=0, r=0, t=0, b=0),
+                                xaxis_visible=False, yaxis_visible=False,
+                                paper_bgcolor='rgba(0,0,0,0)',
+                                plot_bgcolor='rgba(0,0,0,0)'
+                            ).update_traces(mode='lines', fill='tozeroy'),
+                            config={'displayModeBar': False},
+                            style={'marginTop': '5px'}
                         )
-                    ]
-                )
+                    ],
+                    style={
+                        'flex': '1 1 220px',
+                        'maxWidth': '250px',
+                        'minWidth': '220px',
+                        'background': 'rgba(30,30,30,0.85)',
+                        'borderRadius': '16px',
+                        'padding': '20px',
+                        'margin': '10px',
+                        'textAlign': 'center',
+                        'boxShadow': '0 4px 20px rgba(0, 0, 0, 0.3)'
+                    }
+                ),
+
+                # --- CAGR ---
+                html.Div(
+                    [
+                        html.P(f'{CAGR:.2f}%', style={
+                            'textAlign': 'center',
+                            'font-size': '2rem',
+                            'margin': '0'
+                        }),
+                        html.P('CAGR (Growth Rate)', style={
+                            'textAlign': 'center',
+                            'margin': '0 0 10px 0'
+                        }),
+                        dcc.Graph(
+                            figure=px.area(
+                                year_counts,
+                                x='Release Year', y='Count',
+                                height=100, width=200,
+                                color_discrete_sequence=['#B20710']
+                            ).update_layout(
+                                margin=dict(l=0, r=0, t=0, b=0),
+                                xaxis_visible=False, yaxis_visible=False,
+                                paper_bgcolor='rgba(0,0,0,0)',
+                                plot_bgcolor='rgba(0,0,0,0)'
+                            ).update_traces(mode='lines', fill='tozeroy'),
+                            config={'displayModeBar': False},
+                            style={'marginTop': '5px'}
+                        )
+                    ],
+                    style={
+                        'flex': '1 1 220px',
+                        'maxWidth': '250px',
+                        'minWidth': '220px',
+                        'background': 'rgba(30,30,30,0.85)',
+                        'borderRadius': '16px',
+                        'padding': '20px',
+                        'margin': '10px',
+                        'textAlign': 'center',
+                        'boxShadow': '0 4px 20px rgba(0, 0, 0, 0.3)'
+                    }
+                ),
+
+                # --- Countries ---
+                html.Div(
+                    [
+                        html.P(f'{countries}', style={
+                            'textAlign': 'center',
+                            'font-size': '2rem',
+                            'margin': '0'
+                        }),
+                        html.P('Countries', style={
+                            'textAlign': 'center',
+                            'margin': '0 0 10px 0'
+                        }),
+                        dcc.Graph(
+                            figure=px.line(
+                                df.groupby('release_year')['country']
+                                .nunique().reset_index(),
+                                x='release_year', y='country',
+                                height=100, width=200,
+                                color_discrete_sequence=['#E50914']
+                            ).update_layout(
+                                margin=dict(l=0, r=0, t=0, b=0),
+                                xaxis_visible=False, yaxis_visible=False,
+                                paper_bgcolor='rgba(0,0,0,0)',
+                                plot_bgcolor='rgba(0,0,0,0)'
+                            ),
+                            config={'displayModeBar': False},
+                            style={'marginTop': '5px'}
+                        )
+                    ],
+                    style={
+                        'flex': '1 1 220px',
+                        'maxWidth': '250px',
+                        'minWidth': '220px',
+                        'background': 'rgba(30,30,30,0.85)',
+                        'borderRadius': '16px',
+                        'padding': '20px',
+                        'margin': '10px',
+                        'textAlign': 'center',
+                        'boxShadow': '0 4px 20px rgba(0, 0, 0, 0.3)'
+                    }
+                ),
+
+                # --- Genres ---
+                html.Div(
+                    [
+                        html.P(f'{genres}', style={
+                            'textAlign': 'center',
+                            'font-size': '2rem',
+                            'margin': '0'
+                        }),
+                        html.P('Genres', style={
+                            'textAlign': 'center',
+                            'margin': '0 0 10px 0'
+                        }),
+                        dcc.Graph(
+                            figure=px.area(
+                                df.groupby('release_year')['listed_in']
+                                .apply(lambda x: x.str.split(',').explode().nunique())
+                                .reset_index(name='Genre Count'),
+                                x='release_year', y='Genre Count',
+                                height=100, width=200,
+                                color_discrete_sequence=['#E50914']
+                            ).update_layout(
+                                margin=dict(l=0, r=0, t=0, b=0),
+                                xaxis_visible=False, yaxis_visible=False,
+                                paper_bgcolor='rgba(0,0,0,0)',
+                                plot_bgcolor='rgba(0,0,0,0)'
+                            ).update_traces(mode='lines', fill='tozeroy'),
+                            config={'displayModeBar': False},
+                            style={'marginTop': '5px'}
+                        )
+                    ],
+                    style={
+                        'flex': '1 1 220px',
+                        'maxWidth': '250px',
+                        'minWidth': '220px',
+                        'background': 'rgba(30,30,30,0.85)',
+                        'borderRadius': '16px',
+                        'padding': '20px',
+                        'margin': '10px',
+                        'textAlign': 'center',
+                        'boxShadow': '0 4px 20px rgba(0, 0, 0, 0.3)'
+                    }
+                ),
+
+                # --- Shannon Diversity Index ---
+                html.Div(
+                    [
+                        html.P(f'{shannon_index:.2f}', style={
+                            'textAlign': 'center',
+                            'font-size': '2rem',
+                            'margin': '0'
+                        }),
+                        html.P('Shannon Diversity Index', style={
+                            'textAlign': 'center',
+                            'margin': '0 0 10px 0'
+                        }),
+                        dcc.Graph(
+                            figure=px.area(
+                                df.groupby('release_year')['country']
+                                .apply(lambda x: x.dropna().str.split(',').explode().nunique())
+                                .reset_index(name='Diversity'),
+                                x='release_year', y='Diversity',
+                                height=100, width=200,
+                                color_discrete_sequence=['#B0262D']
+                            ).update_layout(
+                                margin=dict(l=0, r=0, t=0, b=0),
+                                xaxis_visible=False, yaxis_visible=False,
+                                paper_bgcolor='rgba(0,0,0,0)',
+                                plot_bgcolor='rgba(0,0,0,0)'
+                            ).update_traces(mode='lines', fill='tozeroy'),
+                            config={'displayModeBar': False},
+                            style={'marginTop': '5px'}
+                        )
+                    ],
+                    style={
+                        'flex': '1 1 220px',
+                        'maxWidth': '250px',
+                        'minWidth': '220px',
+                        'background': 'rgba(30,30,30,0.85)',
+                        'borderRadius': '16px',
+                        'padding': '20px',
+                        'margin': '10px',
+                        'textAlign': 'center',
+                        'boxShadow': '0 4px 20px rgba(0, 0, 0, 0.3)'
+                    }
+                ),
+            ],
+            style={
+                'display': 'flex',
+                'flex-wrap': 'wrap',
+                'justify-content': 'center',
+                'align-items': 'stretch',
+                'gap': '1rem'
+            }
+        )
+    ],
+    style={
+        'width': 'full',
+        'display': 'flex',
+        'flex-direction': 'column',
+        'margin': '10px',
+        'background': 'rgba(30,30,30,0.85)',
+        'backdropFilter': 'blur(8px)',
+        'borderRadius': '16px',
+        'padding': '30px',
+        'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
+    }
+)
+
             ],
             style={
                 'width': 'full',
-                'display':'flex',
+                'display': 'flex',
                 'flex-direction': 'column',
                 'margin': '10px',
                 'background': 'rgba(30,30,30,0.85)',
@@ -503,12 +603,10 @@ layout = html.Div(
                             'font-size': '1.2rem',
                             'font-weight': 'bold'
                         }
-        ),
+                    ),
                 )
             ],
-            style={
-                'width': 'full'
-            }
+            style={'width': 'full'}
         ),
         html.Div(
             [
@@ -551,8 +649,7 @@ layout = html.Div(
                         'borderRadius': '16px',
                         'padding': '30px',
                         'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
-                        'minWidth':'30%'
-                        
+                        'minWidth': '30%'
                     }
                 ),
                 html.Div(
@@ -566,7 +663,7 @@ layout = html.Div(
                         'borderRadius': '16px',
                         'padding': '30px',
                         'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
-                        'minWidth':'50%'
+                        'minWidth': '50%'
                     }
                 ),
                 html.Div(
@@ -595,7 +692,6 @@ layout = html.Div(
                         'padding': '30px',
                         'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
                         'minWidth': '40%'
-                        
                     }
                 ),
                 html.Div(
@@ -610,7 +706,6 @@ layout = html.Div(
                         'padding': '30px',
                         'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
                         'minWidth': '40%'
-                        
                     }
                 ),
             ],
@@ -619,8 +714,61 @@ layout = html.Div(
                 'flexWrap': 'wrap',
                 'justifyContent': 'center',
                 'alignItems': 'stretch',
-                # 'maxWidth': '1100px',
                 'margin': 'auto'
+            }
+        ),
+
+        # -------------------- NEW SECTION 1: STRATEGIC INSIGHT CARDS --------------------
+        html.Div(
+            [
+                html.Div([
+                    html.H4("Systemic Data Anomaly", style={'color': '#E50914'}),
+                    html.P("~30% of titles have 'Unknown Director', mostly TV shows — a signal of missing metadata integrity.")
+                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'}),
+
+                html.Div([
+                    html.H4("Bifurcated Production Model", style={'color': '#E50914'}),
+                    html.P("Distinct creator pipelines emerging: High-volume TV Factory vs. Project-based Movie Studio.")
+                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'}),
+
+                html.Div([
+                    html.H4("Talent Concentration Risk", style={'color': '#E50914'}),
+                    html.P("A small elite set of directors and actors dominate global output — concentration bottleneck risk.")
+                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'}),
+
+                html.Div([
+                    html.H4("Strategic Versatility Assets", style={'color': '#E50914'}),
+                    html.P("Multi-genre creators act as bridge assets to expand new verticals efficiently.")
+                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'})
+            ],
+            style={
+                'display': 'flex',
+                'overflowX': 'auto',
+                'gap': '1rem',
+                'marginTop': '40px',
+                'paddingBottom': '20px',
+                'color': 'white'
+            }
+        ),
+
+        # -------------------- NEW SECTION 2: STRATEGIC RECOMMENDATIONS --------------------
+        html.Div(
+            [
+                html.H3("Strategic Recommendations Preview", style={'color': '#E50914'}),
+                html.Ul([
+                    html.Li("Fix metadata issues — address 'Unknown Director' blind spot."),
+                    html.Li("Formalize two content pipelines — 'TV Factory' and 'Movie Studio'."),
+                    html.Li("Leverage bridge creators to connect siloed markets and genres."),
+                    html.Li("Deploy versatile creators strategically for genre diversification.")
+                ], style={'color': 'white', 'fontSize': '1.1rem', 'lineHeight': '1.6'})
+            ],
+            style={
+                'background': 'rgba(30,30,30,0.85)',
+                'borderRadius': '16px',
+                'padding': '30px',
+                'marginTop': '40px',
+                'marginBottom': '40px',
+                'boxShadow': '0 4px 30px rgba(0,0,0,0.4)'
             }
         )
     ],
@@ -633,4 +781,3 @@ layout = html.Div(
         'overflow': 'scroll-y'
     }
 )
-
