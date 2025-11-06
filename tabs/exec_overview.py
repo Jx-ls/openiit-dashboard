@@ -1,6 +1,7 @@
 from dash import html, dcc, callback, Output, Input
 import pandas as pd
 import plotly.express as px
+import numpy as np
 
 # Load data
 df = pd.read_csv('./data/netflix_titles.csv')
@@ -17,8 +18,16 @@ year_counts.columns = ['Release Year', 'Count']
 # country data
 country_list = df["country"].str.split(",").explode().str.strip() #parsing multiple countries and adding them to the count
 country_counts = country_list.value_counts().head(20)  #top 20 countries
+country_normalized_counts = country_list.value_counts(normalize=True)
+shannon_index = -np.sum(country_normalized_counts * np.log2(country_normalized_counts)) # Calculating Shannon index for diversity index
 
 titles = df['title'].count()
+countries = df['country'].dropna().count()
+start_value = year_counts['Count'].iloc[0]
+end_value = year_counts['Count'].iloc[-1]
+num_years = len(year_counts) - 1
+
+CAGR = ((end_value / start_value) ** (1 / num_years) - 1) * 100
 
 # language data
 lang_keywords = {
@@ -204,6 +213,86 @@ fig_lang_bar.update_layout(
     font=dict(color='white'),
 )
 
+# --- 5. Content Volume Trends Over Time ---
+# We'll use the 'year_added' we created earlier
+df['date_added'] = pd.to_datetime(df['date_added'].str.strip(), format='%B %d, %Y')
+df['year_added'] = df['date_added'].dt.year
+content_trends = df.groupby(['year_added', 'type']).size().reset_index(name='Count')
+# Filter out the current year (which is incomplete) and very old data
+content_trends = content_trends[
+    (content_trends['year_added'] > 2010) &
+    (content_trends['year_added'] < content_trends['year_added'].max())
+]
+
+fig_line = px.line(
+    content_trends,
+    x='year_added',
+    y='Count',
+    color='type',  # This creates two lines: one for Movie, one for TV Show
+    title='📈 Content Volume Added to Netflix (2011-Present)',
+    markers=True,
+    color_discrete_map={'Movie': '#E50914', 'TV Show': '#B00000'}
+)
+fig_line.update_layout(
+    title=dict(
+        text='Content Volume over the year',
+        font=dict(size=18, color='white'),
+        x=0.5
+    ),
+    xaxis=dict(
+        title='Volume',
+        tickangle=0,
+        tickfont=dict(size=11, color='white'),
+        showgrid=False
+    ),
+    yaxis=dict(
+        title='Count',
+        tickfont=dict(size=11, color='white'),
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='rgba(0,0,0,0)',
+    font=dict(color='white'),
+)
+
+# --- 3. Genre Distribution and Popularity Patterns ---
+# This time, let's count *all* genres, not just the primary one
+genre_df = df.copy()
+genre_df = genre_df.set_index('title')['listed_in'].str.split(', ', expand=True).stack()
+genre_df = genre_df.reset_index(level=1, drop=True).value_counts().reset_index()
+genre_df.columns = ['Genre', 'Count']
+genres = genre_df['Genre'].count()
+
+fig_genre_bar = px.bar(
+    genre_df.head(20),
+    x='Count',
+    y='Genre',
+    orientation='h',
+    title='🎭 Top 20 Genres on Netflix',
+    color='Count',
+    color_continuous_scale='Reds'
+)
+fig_genre_bar.update_layout(
+    title=dict(
+        text='Content Volume over the year',
+        font=dict(size=18, color='white'),
+        x=0.5
+    ),
+    xaxis=dict(
+        title='Volume',
+        tickangle=0,
+        tickfont=dict(size=11, color='white'),
+        showgrid=False
+    ),
+    yaxis=dict(
+        title='Count',
+        tickfont=dict(size=11, color='white'),
+        autorange='reversed'
+    ),
+    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='rgba(0,0,0,0)',
+    font=dict(color='white'),
+)
+
 # ---- LAYOUT ----
 layout = html.Div(
     children=[
@@ -220,7 +309,9 @@ layout = html.Div(
                 'color': 'white',
                 'fontWeight': '700',
                 'fontSize': '2.5rem',
-                'marginBottom': '10px'
+                'marginBottom': '10px',
+                'marginTop':0,
+                'padding': 0
             }
         ),
         html.P(
@@ -237,47 +328,145 @@ layout = html.Div(
                 html.Div(
                     [
                         html.P(
-                            "KPIs",
+                            "KPIs(Key Performance Indicators)",
                             style={
-                                'textAlign': 'center'
+                                'textAlign': 'center',
+                                'font-size': '1.2rem',
+                                'font-weight': 'bold'
                             }
                         ),
                         html.Div(
                             [
-                            html.P(
-                            'No.of titles',
+                            html.Div(
+                            [
+                                html.P(
+                                f'{titles}',# No of titles
+                                style={
+                                    'textAlign': 'center',
+                                    'font-size': '2rem',
+                                    'padding': 0,
+                                    'margin': 0
+                                }
+                                ),
+                                html.P(
+                                'Titles',
+                                style={
+                                    'textAlign': 'center',
+                                    'padding': 0,
+                                    'margin': 0
+                                }
+                                ),
+                            ],
                             style={
-                                'textAlign': 'center'
+                                'display': 'flex',
+                                'flex-direction': 'column'
                             }
                             ),
-                            html.P(
-                                "Growth Rate",
+                            html.Div(
+                            [
+                                html.P(
+                                f'{CAGR:.2f} %',
                                 style={
-                                    'textAlign': 'center'
+                                    'textAlign': 'center',
+                                    'font-size': '2rem',
+                                    'padding': 0,
+                                    'margin': 0
                                 }
+                                ),
+                                html.P(
+                                'CAGR',
+                                style={
+                                    'textAlign': 'center',
+                                    'padding': 0,
+                                    'margin': 0
+                                }
+                                ),
+                            ],
+                            style={
+                                'display': 'flex',
+                                'flex-direction': 'column'
+                            }
                             ),
-                            html.P(
-                                "No of countries",
+                            html.Div(
+                            [
+                                html.P(
+                                f'{countries}',
                                 style={
-                                    'textAlign': 'center'
+                                    'textAlign': 'center',
+                                    'font-size': '2rem',
+                                    'padding': 0,
+                                    'margin': 0
                                 }
+                                ),
+                                html.P(
+                                'Countries',
+                                style={
+                                    'textAlign': 'center',
+                                    'padding': 0,
+                                    'margin': 0
+                                }
+                                ),
+                            ],
+                            style={
+                                'display': 'flex',
+                                'flex-direction': 'column'
+                            }
                             ),
-                            html.P(
-                                "No of Genres",
+                            html.Div(
+                            [
+                                html.P(
+                                f'{genres}',
                                 style={
-                                    'textAlign': 'center'
+                                    'textAlign': 'center',
+                                    'font-size': '2rem',
+                                    'padding': 0,
+                                    'margin': 0
                                 }
+                                ),
+                                html.P(
+                                'Genres',
+                                style={
+                                    'textAlign': 'center',
+                                    'padding': 0,
+                                    'margin': 0
+                                }
+                                ),
+                            ],
+                            style={
+                                'display': 'flex',
+                                'flex-direction': 'column'
+                            }
                             ),
-                            html.P(
-                                "Diversity Index",
+                            html.Div(
+                            [
+                                html.P(
+                                f'{shannon_index: .2f}',
                                 style={
-                                    'textAlign': 'center'
+                                    'textAlign': 'center',
+                                    'font-size': '2rem',
+                                    'padding': 0,
+                                    'margin': 0
                                 }
+                                ),
+                                html.P(
+                                'Shannon Diversity index',
+                                style={
+                                    'textAlign': 'center',
+                                    'padding': 0,
+                                    'margin': 0
+                                }
+                                ),
+                            ],
+                            style={
+                                'display': 'flex',
+                                'flex-direction': 'column'
+                            }
                             ),
                             ],
                             style={
                                 'display': 'flex',
                                 'justify-content': 'space-between',
+                                'align-items': 'center',
                                 'gap': '0.1rem',
                                 'flex-wrap': 'wrap'
                             }
@@ -310,7 +499,9 @@ layout = html.Div(
                             'borderRadius': '16px',
                             'padding': '30px',
                             'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
-                            'textAlign': 'center'
+                            'textAlign': 'center',
+                            'font-size': '1.2rem',
+                            'font-weight': 'bold'
                         }
         ),
                 )
@@ -389,6 +580,37 @@ layout = html.Div(
                         'borderRadius': '16px',
                         'padding': '30px',
                         'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
+                        'minWidth': '40%'
+                    }
+                ),
+                html.Div(
+                    dcc.Graph(id='bar-chart', figure=fig_line, config={'displayModeBar': False}),
+                    className='chart-card',
+                    style={
+                        'flex': '1',
+                        'margin': '10px',
+                        'background': 'rgba(30,30,30,0.85)',
+                        'backdropFilter': 'blur(8px)',
+                        'borderRadius': '16px',
+                        'padding': '30px',
+                        'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
+                        'minWidth': '40%'
+                        
+                    }
+                ),
+                html.Div(
+                    dcc.Graph(id='bar-chart', figure=fig_genre_bar, config={'displayModeBar': False}),
+                    className='chart-card',
+                    style={
+                        'flex': '1',
+                        'margin': '10px',
+                        'background': 'rgba(30,30,30,0.85)',
+                        'backdropFilter': 'blur(8px)',
+                        'borderRadius': '16px',
+                        'padding': '30px',
+                        'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
+                        'minWidth': '40%'
+                        
                     }
                 ),
             ],
