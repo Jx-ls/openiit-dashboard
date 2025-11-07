@@ -740,10 +740,10 @@ layout = html.Div(
             [
                 html.H3("Strategic Recommendations Preview", style={'color': '#E50914'}),
                 html.Ul([
-                    html.Li("Fix metadata issues — address 'Unknown Director' blind spot."),
-                    html.Li("Formalize two content pipelines — 'TV Factory' and 'Movie Studio'."),
-                    html.Li("Leverage bridge creators to connect siloed markets and genres."),
-                    html.Li("Deploy versatile creators strategically for genre diversification.")
+                    html.Li("A strategic shift toward retention-driven Originals and globally scalable content."),
+                    html.Li("Targeted genre diversification to super-serve niches and boost discovery."),
+                    html.Li("Household-wide engagement through family content and micro-genre personalization."),
+                    html.Li("Smarter investment allocation guided by growth, quality, and creator strategic value.")
                 ], style={'color': 'var(--font-color)', 'fontSize': '1.1rem', 'lineHeight': '1.6'})
             ],
             style={
