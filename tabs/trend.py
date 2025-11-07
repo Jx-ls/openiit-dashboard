@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, dash_table, Output, Input, State, callback_context
+from dash import Dash, html, dcc, dash_table, Output, Input, State, callback
 import pandas as pd
 import plotly.express as px
 import numpy as np
@@ -32,7 +32,7 @@ def card_style():
     return {
         'flex': '1',
         'margin': '10px',
-        'background': 'rgba(30,30,30,0.85)',
+        'background': 'var(--background-color)',
         'borderRadius': '16px',
         'padding': '30px',
         'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
@@ -52,7 +52,7 @@ layout = html.Div(
             style={
                 'textAlign': 'center',
                 'fontFamily': 'Segoe UI, sans-serif',
-                'color': 'white',
+                'color': 'var(--font-color)',
                 'fontWeight': '700',
                 'fontSize': '2.5rem',
                 'marginBottom': '10px',
@@ -71,7 +71,7 @@ layout = html.Div(
         ),
         html.Div(
             [
-                html.Label("Filter Content Type:", style={'color': 'white', 'marginRight': '10px'}),
+                html.Label("Filter Content Type:", style={'color': 'var(--font-color)', 'marginRight': '10px'}),
                 dcc.Dropdown(
                     id='trend-type-dropdown',
                     options=type_options,
@@ -79,8 +79,8 @@ layout = html.Div(
                     clearable=False,
                     style={
                         'width': '250px',
-                        'backgroundColor': '#1e1e1e',
-                        'color': 'white',
+                        'backgroundColor': 'var(--background-color)',
+                        'color': 'var(--font-color)',
                         'align': 'center'
                     }
                 )
@@ -104,7 +104,7 @@ layout = html.Div(
                         style={
                             'flex': '1',
                             'margin': '10px',
-                            'background': 'rgba(30,30,30,0.85)',
+                            'background': 'var(--background-color)',
                             'backdropFilter': 'blur(8px)',
                             'borderRadius': '16px',
                             'padding': '30px',
@@ -136,7 +136,7 @@ layout = html.Div(
     ],
     className='geo-insights',
     style={
-        'backgroundColor': '#121212',
+        'backgroundColor': 'var(--background-color)',
         'minHeight': '100vh',
         'padding': '60px 20px',
         'fontFamily': 'Segoe UI, sanautosize=Falses-serif',
@@ -144,15 +144,15 @@ layout = html.Div(
     }
 )
 
-def register_trend_callbacks(app):
-    @app.callback(
-        Output('trend-growth-graph', 'figure'),
-        Output('trend-genre-graph', 'figure'),
-        Output('trend-month-graph', 'figure'),
-        Output('trend-emerging-graph', 'figure'),
-        Input('trend-type-dropdown', 'value')
+@callback(
+        Output('trend-growth-graph', 'figure', allow_duplicate=True),
+        Output('trend-genre-graph', 'figure', allow_duplicate=True),
+        Output('trend-month-graph', 'figure', allow_duplicate=True),
+        Output('trend-emerging-graph', 'figure', allow_duplicate=True),
+        Input('trend-type-dropdown', 'value', allow_duplicate=True),
+        Input('current_theme', 'data')
     )
-    def update_trend_charts(selected_type):
+def update_trend_charts(selected_type):
         # --- 0️⃣ Base filtering ---
         df_filtered = df_trend.copy()
         if selected_type in ['Movie', 'TV Show']:

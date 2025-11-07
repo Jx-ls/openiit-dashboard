@@ -178,7 +178,6 @@ def switch_theme(n_clicks, current_theme):
         
     return new_theme, new_css_href
 
-trend.register_trend_callbacks(app)
 
 if __name__ == '__main__':
     app.run(debug=True)
