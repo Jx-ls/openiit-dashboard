@@ -61,13 +61,13 @@ fig_pie = px.pie(
 fig_pie.update_layout(
     title=dict(
         text='Movies vs TV Shows',
-        font=dict(size=18, color='white'),
+        font=dict(size=18, color='var(--font-color)'),
         x=0.5,
         xanchor='center'
     ),
     paper_bgcolor='rgba(0,0,0,0)',
     plot_bgcolor='rgba(0,0,0,0)',
-    font=dict(color='white'),
+    font=dict(color='var(--font-color)'),
     # showlegend=True,
     # legend=dict(
     #     orientation="h",
@@ -75,7 +75,7 @@ fig_pie.update_layout(
     #     y=-0.2,
     #     xanchor="center",
     #     x=0.5,
-    #     font=dict(size=12, color='white')
+    #     font=dict(size=12, color='var(--font-color)')
     # )
 )
 fig_pie.update_traces(
@@ -97,12 +97,12 @@ fig_bar = px.bar(
 fig_bar.update_layout(
         title=dict(
             text='Content Releases Over the Years',
-            font=dict(size=18, color='white'),
+            font=dict(size=18, color='var(--font-color)'),
             x=0.5
         ),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='white'),
+        font=dict(color='var(--font-color)'),
         xaxis=dict(showgrid=False, tickfont=dict(size=11)),
         yaxis=dict(showgrid=False, tickfont=dict(size=11)),
         coloraxis_showscale=False,
@@ -135,21 +135,21 @@ fig_hist = px.histogram(
 fig_hist.update_layout(
     title=dict(
         text='Rates of Category by Type',
-        font=dict(size=18, color='white'),
+        font=dict(size=18, color='var(--font-color)'),
         x=0.5
     ),
     xaxis=dict(
         title='Category',
         tickangle=45,
-        tickfont=dict(size=11, color='white')
+        tickfont=dict(size=11, color='var(--font-color)')
     ),
     yaxis=dict(
         title='Count',
-        tickfont=dict(size=11, color='white')
+        tickfont=dict(size=11, color='var(--font-color)')
     ),
     plot_bgcolor='rgba(0,0,0,0)',
     paper_bgcolor='rgba(0,0,0,0)',
-    font=dict(color='white'),
+    font=dict(color='var(--font-color)'),
     legend=dict(
         title='Type',
     )
@@ -166,23 +166,23 @@ fig_country_bar = px.bar(
 fig_country_bar.update_layout(
     title= dict(
         text= 'Top 20 countries ',
-        font=dict(size=18, color='white'),
+        font=dict(size=18, color='var(--font-color)'),
         x=0.5
     ),
     xaxis=dict(
         title='Country',
         tickangle=0,
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
         showgrid=False
     ),
     yaxis=dict(
         title='Count',
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
         showgrid=False
     ),
     plot_bgcolor='rgba(0,0,0,0)',
     paper_bgcolor='rgba(0,0,0,0)',
-    font=dict(color='white'),
+    font=dict(color='var(--font-color)'),
 )
 
 # ---- Language Bar Graph ----
@@ -195,22 +195,22 @@ fig_lang_bar = px.bar(
 fig_lang_bar.update_layout(
     title=dict(
         text='Language Based Content Division',
-        font=dict(size=18, color='white'),
+        font=dict(size=18, color='var(--font-color)'),
         x=0.5
     ),
     xaxis=dict(
         title='Language',
         tickangle=0,
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
     ),
     yaxis=dict(
         title='Count',
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
         showgrid=False
     ),
     plot_bgcolor='rgba(0,0,0,0)',
     paper_bgcolor='rgba(0,0,0,0)',
-    font=dict(color='white'),
+    font=dict(color='var(--font-color)'),
 )
 
 # --- 5. Content Volume Trends Over Time ---
@@ -236,22 +236,22 @@ fig_line = px.line(
 fig_line.update_layout(
     title=dict(
         text='Content Volume over the year',
-        font=dict(size=18, color='white'),
+        font=dict(size=18, color='var(--font-color)'),
         x=0.5
     ),
     xaxis=dict(
         title='Volume',
         tickangle=0,
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
         showgrid=False
     ),
     yaxis=dict(
         title='Count',
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
     ),
     plot_bgcolor='rgba(0,0,0,0)',
     paper_bgcolor='rgba(0,0,0,0)',
-    font=dict(color='white'),
+    font=dict(color='var(--font-color)'),
 )
 
 # --- 3. Genre Distribution and Popularity Patterns ---
@@ -274,23 +274,23 @@ fig_genre_bar = px.bar(
 fig_genre_bar.update_layout(
     title=dict(
         text='Content Volume over the year',
-        font=dict(size=18, color='white'),
+        font=dict(size=18, color='var(--font-color)'),
         x=0.5
     ),
     xaxis=dict(
         title='Volume',
         tickangle=0,
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
         showgrid=False
     ),
     yaxis=dict(
         title='Count',
-        tickfont=dict(size=11, color='white'),
+        tickfont=dict(size=11, color='var(--font-color)'),
         autorange='reversed'
     ),
     plot_bgcolor='rgba(0,0,0,0)',
     paper_bgcolor='rgba(0,0,0,0)',
-    font=dict(color='white'),
+    font=dict(color='var(--font-color)'),
 )
 
 # ---- LAYOUT ----
@@ -307,7 +307,7 @@ layout = html.Div(
             style={
                 'textAlign': 'center',
                 'fontFamily': 'Segoe UI, sans-serif',
-                'color': 'white',
+                'color': 'var(--font-color)',
                 'fontWeight': '700',
                 'fontSize': '2.5rem',
                 'marginBottom': '10px',
@@ -319,9 +319,9 @@ layout = html.Div(
             "High-level summary of Netflix content trends and release evolution.",
             style={
                 'textAlign': 'center',
-                'color': '#ccc',
                 'fontSize': '1.1rem',
-                'marginBottom': '50px'
+                'marginBottom': '50px',
+                'color': 'var(--font-color)'
             }
         ),
         html.Div(
@@ -373,7 +373,7 @@ layout = html.Div(
                         'flex': '1 1 220px',
                         'maxWidth': '250px',
                         'minWidth': '220px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'borderRadius': '16px',
                         'padding': '20px',
                         'margin': '10px',
@@ -414,7 +414,7 @@ layout = html.Div(
                         'flex': '1 1 220px',
                         'maxWidth': '250px',
                         'minWidth': '220px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'borderRadius': '16px',
                         'padding': '20px',
                         'margin': '10px',
@@ -456,7 +456,7 @@ layout = html.Div(
                         'flex': '1 1 220px',
                         'maxWidth': '250px',
                         'minWidth': '220px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'borderRadius': '16px',
                         'padding': '20px',
                         'margin': '10px',
@@ -499,7 +499,7 @@ layout = html.Div(
                         'flex': '1 1 220px',
                         'maxWidth': '250px',
                         'minWidth': '220px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'borderRadius': '16px',
                         'padding': '20px',
                         'margin': '10px',
@@ -542,7 +542,7 @@ layout = html.Div(
                         'flex': '1 1 220px',
                         'maxWidth': '250px',
                         'minWidth': '220px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'borderRadius': '16px',
                         'padding': '20px',
                         'margin': '10px',
@@ -565,11 +565,9 @@ layout = html.Div(
         'display': 'flex',
         'flex-direction': 'column',
         'margin': '10px',
-        'background': 'rgba(30,30,30,0.85)',
-        'backdropFilter': 'blur(8px)',
+        'background': 'var(--graph-color)',
         'borderRadius': '16px',
         'padding': '30px',
-        'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
     }
 )
 
@@ -579,7 +577,7 @@ layout = html.Div(
                 'display': 'flex',
                 'flex-direction': 'column',
                 'margin': '10px',
-                'background': 'rgba(30,30,30,0.85)',
+                'background': 'var(--graph-color)',
                 'backdropFilter': 'blur(8px)',
                 'borderRadius': '16px',
                 'padding': '30px',
@@ -594,7 +592,7 @@ layout = html.Div(
                         style={
                             'flex': '1',
                             'margin': '10px',
-                            'background': 'rgba(30,30,30,0.85)',
+                            'background': 'var(--graph-color)',
                             'backdropFilter': 'blur(8px)',
                             'borderRadius': '16px',
                             'padding': '30px',
@@ -616,7 +614,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -630,7 +628,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -644,7 +642,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -658,7 +656,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -672,7 +670,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -686,7 +684,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -700,7 +698,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -724,22 +722,22 @@ layout = html.Div(
                 html.Div([
                     html.H4("Systemic Data Anomaly", style={'color': '#E50914'}),
                     html.P("~30% of titles have 'Unknown Director', mostly TV shows — a signal of missing metadata integrity.")
-                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'}),
+                ], style={'minWidth': '250px', 'background': 'var(--graph-color)', 'padding': '20px', 'borderRadius': '12px','backdropFilter': 'blur(8px)','boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',}),
 
                 html.Div([
                     html.H4("Bifurcated Production Model", style={'color': '#E50914'}),
                     html.P("Distinct creator pipelines emerging: High-volume TV Factory vs. Project-based Movie Studio.")
-                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'}),
+                ], style={'minWidth': '250px', 'background': 'var(--graph-color)', 'padding': '20px', 'borderRadius': '12px','backdropFilter': 'blur(8px)','boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',}),
 
                 html.Div([
                     html.H4("Talent Concentration Risk", style={'color': '#E50914'}),
                     html.P("A small elite set of directors and actors dominate global output — concentration bottleneck risk.")
-                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'}),
+                ], style={'minWidth': '250px', 'background': 'var(--graph-color)', 'padding': '20px', 'borderRadius': '12px', 'backdropFilter': 'blur(8px)','boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',}),
 
                 html.Div([
                     html.H4("Strategic Versatility Assets", style={'color': '#E50914'}),
                     html.P("Multi-genre creators act as bridge assets to expand new verticals efficiently.")
-                ], style={'minWidth': '250px', 'background': 'rgba(30,30,30,0.85)', 'padding': '20px', 'borderRadius': '12px'})
+                ], style={'minWidth': '250px', 'background': 'var(--graph-color)', 'padding': '20px', 'borderRadius': '12px','backdropFilter': 'blur(8px)','boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',})
             ],
             style={
                 'display': 'flex',
@@ -747,7 +745,7 @@ layout = html.Div(
                 'gap': '1rem',
                 'marginTop': '40px',
                 'paddingBottom': '20px',
-                'color': 'white'
+                'color': 'var(--font-color)'
             }
         ),
 
@@ -760,10 +758,10 @@ layout = html.Div(
                     html.Li("Formalize two content pipelines — 'TV Factory' and 'Movie Studio'."),
                     html.Li("Leverage bridge creators to connect siloed markets and genres."),
                     html.Li("Deploy versatile creators strategically for genre diversification.")
-                ], style={'color': 'white', 'fontSize': '1.1rem', 'lineHeight': '1.6'})
+                ], style={'color': 'var(--font-color)', 'fontSize': '1.1rem', 'lineHeight': '1.6'})
             ],
             style={
-                'background': 'rgba(30,30,30,0.85)',
+                'background': 'var(--graph-color)',
                 'borderRadius': '16px',
                 'padding': '30px',
                 'marginTop': '40px',
@@ -774,7 +772,7 @@ layout = html.Div(
     ],
     className='exec-overview',
     style={
-        'backgroundColor': '#121212',
+        'backgroundColor': 'var(--background-color)',
         'minHeight': '100vh',
         'padding': '60px 20px',
         'fontFamily': 'Segoe UI, sans-serif',

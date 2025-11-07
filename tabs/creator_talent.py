@@ -109,11 +109,11 @@ layout = html.Div(
                 html.Span("T", style={'color': '#E50914'}),
                 "alent Overview"
             ],
-            style={'padding': 0, 'margin': 0, 'color': 'white'}
+            style={'padding': 0, 'margin': 0, 'color': 'var(--font-color)'}
         ),
         html.P(
             "Select a creator to see their genre distribution.",
-            style={'padding': 0, 'margin': 0, 'color': '#CCCCCC'}
+            style={'padding': 0, 'margin': 0, 'color': 'var(--font-color)'}
         ),
         dcc.Dropdown(
             id='creator-search',
@@ -137,7 +137,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -152,7 +152,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -167,7 +167,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -229,7 +229,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -244,7 +244,7 @@ layout = html.Div(
                     style={
                         'flex': '1',
                         'margin': '10px',
-                        'background': 'rgba(30,30,30,0.85)',
+                        'background': 'var(--graph-color)',
                         'backdropFilter': 'blur(8px)',
                         'borderRadius': '16px',
                         'padding': '30px',
@@ -264,7 +264,7 @@ layout = html.Div(
     ],
     className='genre-int',
     style={
-        'backgroundColor': '#000000',
+        'backgroundColor': 'var(--background-color)',
         'minHeight': '100vh',
         'minWidth': '90vw',
         'padding': '60px 20px',
@@ -292,7 +292,7 @@ def generate_genre_bar_graph(selected_name):
 
     if not all_genres:
         fig = px.bar(title=f"No genre data available for {selected_name}")
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white')
+        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='var(--font-color)')
         return fig
 
     genre_counts = pd.Series(all_genres).value_counts().reset_index()
@@ -306,8 +306,8 @@ def generate_genre_bar_graph(selected_name):
         yaxis_title='Count',
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font_color='white',
-        title_font=dict(size=20, color='white'),
+        font_color='var(--font-color)',
+        title_font=dict(size=20, color='var(--font-color)'),
         margin=dict(l=40, r=20, t=60, b=60)
     )
     return fig
@@ -335,10 +335,10 @@ def generate_type_pie_chart(selected_name):
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font_color='white',
-        title_font=dict(size=20, color='white'),
+        font_color='var(--font-color)',
+        title_font=dict(size=20, color='var(--font-color)'),
         margin=dict(l=40, r=20, t=60, b=60),
-        legend=dict(title='', orientation='h', y=-0.1, font=dict(color='white'))
+        legend=dict(title='', orientation='h', y=-0.1, font=dict(color='var(--font-color)'))
     )
     return fig
 
@@ -374,8 +374,8 @@ def generate_active_year_line_chart(selected_name):
         ),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font_color='white',
-        title_font=dict(size=20, color='white'),
+        font_color='var(--font-color)',
+        title_font=dict(size=20, color='var(--font-color)'),
         margin=dict(l=40, r=20, t=60, b=60),
         hovermode='x unified'
     )
@@ -397,10 +397,10 @@ def rising_stars(_):
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
-        font_color='white',
+        font_color='var(--font-color)',
         margin=dict(l=40, r=20, t=60, b=120),
         yaxis=dict(tickformat=".0%", gridcolor='#333333'),
-        title_font=dict(size=20, color='white')
+        title_font=dict(size=20, color='var(--font-color)')
     )
     return fig
 
