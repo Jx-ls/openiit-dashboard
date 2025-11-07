@@ -1,9 +1,44 @@
 # Team Sigmoid
-### Open IIT Data Analytics Hackathon: Problem Statement - 3
-# Dashboard
-## Live Demo
-You can view the live, hosted version of this dashboard here:
-[Team Sigmoid](https://team-sigmoid-dashboard.onrender.com/)
+## OpenIIT Dashboard
+
+This project is a data-driven dashboard built with [Dash](https://dash.plotly.com/) designed for interactive analytics and visualization of the provided **Netflix** data. It features a sidebar navigation with seven tabs, each representing a different analytical view, and the last button supports dynamic theme switching (dark/light).
+
+### Features
+- **Sidebar Navigation:** Fixed left sidebar with tab icons for switching between views.
+- **Tabs:** Seven main tabs:
+  1. Executive Overview
+  2. Content Intelligence
+  3. Trend Analysis
+  4. Geo Insights
+  5. Genre Intelligence
+  6. Creator Talent
+  7. Strategic Recommendations
+- **Theme Switcher:** Toggle between dark and light themes.
+- **Modular Code:** Each tab's layout and callbacks are defined in separate files under `tabs/`.
+- **Custom Styling:** Uses CSS files in `assets/` for theming and layout.
+
+### Project Structure
+
+```
+├── app.py                
+├── requirements.txt      
+├── assets/              
+│   ├── dark.css
+│   ├── light.css
+│   ├── style.css
+│   └── Tab/              
+├── data/
+│   └── netflix_titles.csv
+├── tabs/                 
+│   ├── content.py
+│   ├── creator_talent.py
+│   ├── exec_overview.py
+│   ├── genre_intelligence.py
+│   ├── geo_insights.py
+│   ├── strat_recom.py
+│   └── trend.py
+```
+
 ## Setup
 ### Clone the repository
 ```bash
@@ -27,7 +62,4 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-### Run the app
-```bash
-python app.py
-```
+---
