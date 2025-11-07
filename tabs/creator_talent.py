@@ -3,17 +3,15 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import dash_cytoscape as cyto
+from collections import defaultdict, Counter
 
 
-# ----------------------------------------------------------
 # Load Data
-# ----------------------------------------------------------
 df = pd.read_csv('./data/netflix_titles.csv')
 df.fillna('', inplace=True)
 df['release_year'] = pd.to_numeric(df['release_year'], errors='coerce')
 df['listed_in'] = df['listed_in'].astype(str)
 
-# --- Helper splitters ---
 def split_people(s):
     return [x.strip() for x in s.split(',') if x.strip()] if isinstance(s, str) and s.strip() else []
 
@@ -25,7 +23,6 @@ def parse_year_added(s):
 
 df['year_added'] = df['date_added'].apply(parse_year_added)
 
-# --- Prepare lists ---
 dir_rows, act_rows = [], []
 
 for _, row in df.iterrows():
@@ -41,7 +38,6 @@ for _, row in df.iterrows():
         'description': row.get('description', ''),
     }
 
-    # Director entry
     if isinstance(row['director'], str) and row['director'].strip():
         dir_rows.append({
             **base,
@@ -49,7 +45,6 @@ for _, row in df.iterrows():
             'role': 'Director'
         })
 
-    # Actor entries
     for actor in split_people(row['cast']):
         act_rows.append({
             **base,
@@ -57,14 +52,10 @@ for _, row in df.iterrows():
             'role': 'Actor'
         })
 
-# --- Combine ---
 creators_df = pd.DataFrame(dir_rows + act_rows)
 creator_names = sorted(creators_df['name'].dropna().unique().tolist())
 
-# ---------- FAST PRECOMPUTE FOR CYTOSCAPE ----------
-from collections import defaultdict, Counter
 
-# Map each title -> set of people (director + cast)
 TITLE_PEOPLE = {}
 for _, row in df.iterrows():
     people = set()
@@ -74,13 +65,11 @@ for _, row in df.iterrows():
     if people:
         TITLE_PEOPLE[row['title']] = people
 
-# Map each person -> list of titles they appear in
 NAME_TITLES = defaultdict(list)
 for title, people in TITLE_PEOPLE.items():
     for p in people:
         NAME_TITLES[p].append(title)
 
-# Person -> primary role (mode), fallback 'Actor'
 NAME_ROLE = (
     creators_df.drop_duplicates(['name', 'role'])
     .groupby('name')['role']
@@ -90,7 +79,6 @@ NAME_ROLE = (
 
 
 # ---------- Rising Stars Computation ----------
-# ---------- Improved Rising Stars Computation ----------
 RECENT_YEARS = 5
 max_year_added = int(pd.Series(df['year_added']).dropna().max()) if pd.Series(df['year_added']).notna().any() else None
 
@@ -125,9 +113,7 @@ else:
 
 
 
-# ----------------------------------------------------------
 # Layout (Netflix-Themed)
-# ----------------------------------------------------------
 layout = html.Div(
     children=[
         html.H1(
@@ -159,7 +145,6 @@ layout = html.Div(
         ),
         html.Div(
             [
-                # Genre Chart
                 html.Div(
                     dcc.Graph(id='bar-chart', figure={}, config={'displayModeBar': False}),
                     className='chart-card',
@@ -174,7 +159,6 @@ layout = html.Div(
                         'minWidth': '40%'
                     }
                 ),
-                # Type Pie
                 html.Div(
                     dcc.Graph(id='pie-chart', figure={}, config={'displayModeBar': False}),
                     className='chart-card',
@@ -189,7 +173,6 @@ layout = html.Div(
                         'minWidth': '40%'
                     }
                 ),
-                # Activity Line
                 html.Div(
                     dcc.Graph(id='line-chart', figure={}, config={'displayModeBar': False}),
                     className='chart-card',
@@ -204,7 +187,6 @@ layout = html.Div(
                         'minWidth': '50%'
                     }
                 ),
-                # Collaboration Graph
                 html.Div(
                     cyto.Cytoscape(
                         id='collab-graph',
@@ -266,7 +248,6 @@ layout = html.Div(
                         'minWidth': '30%'
                     }
                 ),
-                # Rising Stars
                 html.Div(
                     dcc.Graph(id='rising-stars-bar', figure={}, config={'displayModeBar': False}),
                     className='chart-card',
@@ -306,9 +287,7 @@ layout = html.Div(
 )
 
 
-# ----------------------------------------------------------
 # Callbacks
-# ----------------------------------------------------------
 @callback(
     Output("bar-chart", "figure", allow_duplicate=True),
     [Input('creator-search', "value"),
@@ -316,7 +295,6 @@ layout = html.Div(
     prevent_initial_call='initial_duplicate'
 )
 def generate_genre_bar_graph(selected_name, current_theme):
-    # Choose colors dynamically
     if current_theme == 'light':
         text_color = '#0F0F0F'
         bg_color = '#FFFFFF'
@@ -369,9 +347,7 @@ def generate_genre_bar_graph(selected_name, current_theme):
     return fig
 
 
-# ----------------------------------------------------------
 # PIE CHART
-# ----------------------------------------------------------
 @callback(
     Output("pie-chart", "figure", allow_duplicate=True),
     [Input('creator-search', "value"),
@@ -379,7 +355,6 @@ def generate_genre_bar_graph(selected_name, current_theme):
     prevent_initial_call='initial_duplicate'
 )
 def generate_type_pie_chart(selected_name, current_theme):
-    # Dynamic theme colors
     if current_theme == 'light':
         text_color = '#0F0F0F'
         bg_color = '#FFFFFF'
@@ -421,9 +396,7 @@ def generate_type_pie_chart(selected_name, current_theme):
     return fig
 
 
-# ----------------------------------------------------------
 # LINE CHART
-# ----------------------------------------------------------
 @callback(
     Output("line-chart", "figure", allow_duplicate=True),
     [Input('creator-search', "value"),
@@ -431,7 +404,6 @@ def generate_type_pie_chart(selected_name, current_theme):
     prevent_initial_call='initial_duplicate'
 )
 def generate_active_year_line_chart(selected_name, current_theme):
-    # Theme colors
     if current_theme == 'light':
         text_color = '#0F0F0F'
         bg_color = '#FFFFFF'
@@ -477,9 +449,7 @@ def generate_active_year_line_chart(selected_name, current_theme):
     return fig
 
 
-# ----------------------------------------------------------
 # RISING STARS BAR
-# ----------------------------------------------------------
 @callback(
     Output('rising-stars-bar', 'figure', allow_duplicate=True),
     [Input('creator-search', 'value'),
@@ -487,7 +457,6 @@ def generate_active_year_line_chart(selected_name, current_theme):
     prevent_initial_call='initial_duplicate'
 )
 def rising_stars(_, current_theme):
-    # Theme colors
     if current_theme == 'light':
         text_color = '#0F0F0F'
         bg_color = '#FFFFFF'
@@ -529,33 +498,26 @@ def rising_stars(_, current_theme):
 
 from collections import Counter
 
-# Keep only the strongest connections so the graph doesn't explode
-MAX_NEIGHBORS = 35  # tweak if you want fewer/more nodes
+MAX_NEIGHBORS = 35  
 
 @callback(Output('collab-graph', 'elements'), Input('creator-search', 'value'))
 def build_collab_graph_fast(selected_name):
     if not selected_name:
         return []
 
-    # Titles for the selected person (O(1) hash lookups + small list)
     titles = NAME_TITLES.get(selected_name, [])
     if not titles:
-        # Node only, no edges
         return [{'data': {'id': selected_name, 'label': selected_name, 'role': NAME_ROLE.get(selected_name, 'Actor')}}]
 
-    # Count collaborators by frequency across the user's titles
     collab_counter = Counter()
     for t in titles:
-        # people in that title (already pre-split)
         for p in TITLE_PEOPLE.get(t, ()):
             if p != selected_name:
                 collab_counter[p] += 1
 
-    # Keep only the strongest neighbors to keep the graph readable/snappy
     MAX_NEIGHBORS = 35
     top_collabs = [name for name, _ in collab_counter.most_common(MAX_NEIGHBORS)]
 
-    # Nodes
     elements = []
     elements.append({
         'data': {
@@ -573,7 +535,6 @@ def build_collab_graph_fast(selected_name):
             }
         })
 
-    # Edges ONLY selected -> collaborator (avoids dense hairballs)
     for c in top_collabs:
         elements.append({'data': {'source': selected_name, 'target': c}})
 
