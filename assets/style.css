@@ -462,4 +462,24 @@ input.current-page {
   box-shadow: none !important;
 }
 
+.Select-control {
+  border: 1px solid #E50914 !important;
+  background-color: #1b1b1b !important;
+  color: white !important;
+  transition: all 0.25s ease-in-out;
+}
+
+.Select-control:hover {
+  border-color: #ff4444 !important;
+  box-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
+}
+
+.Select-value-label {
+  color: white !important;
+}
+
+.Select-menu-outer {
+  background-color: #1b1b1b !important;
+  border: 1px solid #E50914 !important;
+}
 

@@ -61,7 +61,7 @@ layout = html.Div(
                     dcc.Input(
                         id='search-title',
                         type='text',
-                        placeholder='🔍 Search Title, Director, Cast, or Genre...',
+                        placeholder='Search Title, Director, Cast, or Genre...',
                         debounce=True,
                         style={
                             'width': '100%',
