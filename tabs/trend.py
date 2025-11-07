@@ -100,13 +100,14 @@ layout = html.Div(
             ],
             id='trend-graphs-container',
             style={
-                'display': 'grid',
-                'gridTemplateColumns': 'repeat(auto-fit, minmax(420px, 1fr))',
-                'gap': '30px',
+                'display': 'flex',
+                'flex-wrap': 'wrap',
+                'gap': '20px',
                 'justifyItems': 'center',
                 'alignItems': 'stretch',
-                'width': '95%',
-                'margin': 'auto'
+                'width': '100%',
+                'margin': 'auto',
+                'justify-content': 'center'
             }
         ),
     ],
