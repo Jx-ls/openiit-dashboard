@@ -483,3 +483,21 @@ input.current-page {
   border: 1px solid #E50914 !important;
 }
 
+.year-slider .rc-slider-track {
+  background-color: #E50914 !important;
+}
+.year-slider .rc-slider-handle {
+  border: solid 2px #E50914 !important;
+  background-color: #121212 !important;
+}
+.year-slider .rc-slider-rail {
+  background-color: #3a3a3a !important;
+}
+.year-slider .rc-slider-dot-active {
+  border-color: #E50914 !important;
+}
+.year-slider .rc-slider-tooltip-inner {
+  background-color: #E50914 !important;
+  color: white !important;
+}
+
