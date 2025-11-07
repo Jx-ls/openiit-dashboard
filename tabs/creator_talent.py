@@ -149,6 +149,7 @@ layout = html.Div(
                 'width': '80%',
                 'margin': '20px auto',
                 'color': 'var(--font-color)',
+                'border':  '1 px solid black'
             },
         ),
         html.Div(

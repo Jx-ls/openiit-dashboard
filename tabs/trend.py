@@ -61,9 +61,9 @@ layout = html.Div(
                     clearable=False,
                     style={
                         'width': '250px',
-                        'backgroundColor': '#000000',  # Always black
+                        'backgroundColor': 'var(--background-color)',  # Always black
                         'color': 'white',
-                        'border': '1px solid rgba(229,9,20,0.5)',
+                        'border': '1.2px solid rgba(229,9,20,0.5)',
                         'textAlign': 'center'
                     }
                 )

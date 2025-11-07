@@ -269,22 +269,41 @@ def card_style():
         'flex': '1',
         'margin': '10px',
         'background': 'var(--graph-color)',
-        'borderRadius': '16px',
-        'padding': '30px',
-        'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
+        'borderRadius': 'var(--card-radius)',
+        'padding': '35px',
+        'boxShadow': 'var(--card-shadow)',
         'minWidth': '40%',
-        'transition': 'background 0.3s ease'
+        'transition': f'all var(--transition-speed) ease',
+        'backdropFilter': 'blur(10px)',
+        'WebkitBackdropFilter': 'blur(10px)'
     }
 
 layout = html.Div(
     [
         html.H1(
             [html.Span("G", style={'color': '#E50914'}), "eographic ", html.Span("I", style={'color': '#E50914'}), "nsights"],
-            style={'textAlign': 'center', 'color': 'var(--font-color)', 'fontWeight': '700', 'fontSize': '2.5rem'}
+            style={
+                'textAlign': 'center',
+                'color': 'var(--font-color)',
+                'fontWeight': 'var(--heading-weight)',
+                'fontSize': '2.5rem',
+                'letterSpacing': '-0.02em',
+                'marginBottom': '15px',
+                'transition': 'color var(--transition-speed) ease'
+            }
         ),
         html.P(
-            "Comparative overview of Netflix’s performance across countries.",
-            style={'textAlign': 'center', 'color': 'var(--font-color)', 'marginBottom': '40px'}
+            "Comparative overview of Netflix's performance across countries.",
+            style={
+                'textAlign': 'center',
+                'color': 'var(--font-color)',
+                'marginBottom': '45px',
+                'fontSize': '1.1rem',
+                'fontWeight': 'var(--subheading-weight)',
+                'maxWidth': '800px',
+                'margin': '0 auto 45px auto',
+                'lineHeight': '1.5'
+            }
         ),
 
         dcc.Graph(id='fig_world', figure=fig_world, config={'displayModeBar': False}, style=card_style()),
@@ -309,11 +328,17 @@ def _apply_theme(fig, theme):
     if theme == "light":
         text_color = "#0F0F0F"
         bg_color = "#FFFFFF"
-        grid_color = "#DDDDDD"
+        grid_color = "var(--grid-color-light)"
+        ocean_color = "rgba(240,240,240,0.90)"
     else:
         text_color = "#FFFFFF"
         bg_color = "#0F0F0F"
-        grid_color = "#333333"
+        grid_color = "var(--grid-color-dark)"
+        ocean_color = "rgba(40,40,40,0.90)"
+    
+    # Update ocean color for maps
+    if 'geo' in fig.layout:
+        fig.layout.geo.update(oceancolor=ocean_color)
 
     fig.update_layout(
         paper_bgcolor=bg_color,

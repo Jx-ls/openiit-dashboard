@@ -36,14 +36,25 @@ layout = html.Div([
         ], id='page-title', style={
             'textAlign': 'center',
             'fontFamily': 'Segoe UI, sans-serif',
-            'fontWeight': '700',
+            'fontWeight': 'var(--heading-weight)',
             'fontSize': '2.5rem',
-            'marginBottom': '10px'
+            'marginBottom': '15px',
+            'letterSpacing': '-0.02em',
+            'transition': 'color var(--transition-speed) ease'
         }),
 
         html.P("Explore genre trends, category relationships, and identify strategic content opportunities.",
                id='page-description',
-               style={'textAlign': 'center', 'fontSize': '1.1rem', 'marginBottom': '30px'})
+               style={
+                   'textAlign': 'center', 
+                   'fontSize': '1.1rem', 
+                   'marginBottom': '35px', 
+                   'color': 'var(--muted-text)',
+                   'fontWeight': 'var(--subheading-weight)',
+                   'maxWidth': '800px',
+                   'margin': '0 auto 35px auto',
+                   'lineHeight': '1.5'
+               })
     ]),
 
     # --- Filters ---
@@ -54,7 +65,10 @@ layout = html.Div([
             value='all',
             placeholder='Type',
             className='theme-dropdown',
-            style={}
+            style={
+                'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)',
+            }
         ),
         dcc.Dropdown(
             id='genre-country',
@@ -62,7 +76,10 @@ layout = html.Div([
             value='all',
             placeholder='Country',
             className='theme-dropdown',
-            style={}
+            style={
+                'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)',
+            }
         ),
         dcc.Dropdown(
             id='genre-rating',
@@ -70,11 +87,14 @@ layout = html.Div([
             value='all',
             placeholder='Rating',
             className='theme-dropdown',
-            style={}
+            style={
+                'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)',
+            }
         ),
         html.Div([
             html.Label('Release Year Range:',
-                       style={'color': 'var(--subtext-color)', 'marginBottom': '8px', 'fontSize': '0.9rem'}),
+                       style={'color': 'var(--muted-text)', 'marginBottom': '8px', 'fontSize': '0.9rem'}),
             dcc.RangeSlider(
                 id='genre-year',
                 min=int(df['release_year'].min()),
@@ -155,13 +175,20 @@ layout = html.Div([
 )
 def update_dropdown_styles(current_theme):
     # Always keep dropdown background black
-    dropdown_style = {
-        'backgroundColor': '#000000',  # Always black
-        'color': '#ffffff',            # White text for readability
-        'border': '1px solid rgba(229,9,20,0.5)',
-    }
-    return dropdown_style, dropdown_style, dropdown_style
+    if current_theme == 'light':
+        dropdown_style = {
+            'backgroundColor': '#ffffff',  # white background
+            'color': '#000000',            # black text
+            'border': '1px solid rgba(229,9,20,0.5)',
+        }
+    else:
+        dropdown_style = {
+            'backgroundColor': '#1a1a1a',  # dark gray
+            'color': '#ffffff',            # white text
+            'border': '1px solid rgba(229,9,20,0.5)',
+        }
 
+    return dropdown_style, dropdown_style, dropdown_style
 
 # --- MAIN DATA CALLBACK ---
 @callback(

@@ -42,18 +42,27 @@ layout = html.Div(
                 'textAlign': 'center',
                 'fontFamily': 'Segoe UI, sans-serif',
                 'color': 'var(--font-color)',
-                'fontWeight': '700',
+                'fontWeight': 'var(--heading-weight)',
                 'fontSize': '2.5rem',
-                'marginBottom': '10px',
+                'marginBottom': '15px',
                 'marginTop': 0,
+                'letterSpacing': '-0.02em',
+                'transition': 'color var(--transition-speed) ease'
             }
         ),
-        html.P(
+                html.P(
             "Search and filter through Netflix's content library for strategic exploration.",
-            style={'textAlign': 'center', 'color': '#ccc', 'fontSize': '1.1rem', 'marginBottom': '30px'}
-        ),
-
-        # --- ADVANCED FILTER BAR ---
+            style={
+                'textAlign': 'center',
+                'color': 'var(--muted-text)',
+                'fontSize': '1.1rem',
+                'marginBottom': '35px',
+                'fontWeight': 'var(--subheading-weight)',
+                'maxWidth': '800px',
+                'margin': '0 auto 35px auto',
+                'lineHeight': '1.5'
+            }
+        ),        # --- ADVANCED FILTER BAR ---
         html.Div(
             [
                 # Row 1: Search and primary filters
@@ -66,12 +75,12 @@ layout = html.Div(
                         style={
                             'width': '100%',
                             'padding': '12px 15px',
-                            'borderRadius': '8px',
-                            'border': '1px solid rgba(229,9,20,0.5)',
-                            'backgroundColor': 'var(--background-color)',
-                            'color': 'white',
+                            'borderRadius': '10px',
+                            'border': '1px solid var(--border-color)',
+                            'backgroundColor': 'var(--dropdown-bg)',
+                            'color': 'var(--dropdown-text)',
                             'fontSize': '1rem',
-                            'boxShadow': 'inset 0 0 8px rgba(229,9,20,0.1)',
+                            'boxShadow': 'inset 0 0 8px var(--border-color)',
                             'outline': 'none',
                         }
                     ),
@@ -85,8 +94,8 @@ layout = html.Div(
                     placeholder='Type',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': 'var(--background-color)',
-                        'color': 'white',
+                        'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)',
                     }
                 ),
                 dcc.Dropdown(
@@ -96,8 +105,8 @@ layout = html.Div(
                     placeholder='Country',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': 'var(--background-color)',
-                        'color': 'white',
+                        'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)',
                     }
                 ),
                 dcc.Dropdown(
@@ -107,8 +116,8 @@ layout = html.Div(
                     placeholder='Genre',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': 'var(--background-color)',
-                        'color': 'white',
+                        'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)',
                     }
                 ),
                 dcc.Dropdown(
@@ -118,14 +127,14 @@ layout = html.Div(
                     placeholder='Rating',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': 'var(--background-color)',
-                        'color': 'white',
+                        'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)',
                     }
                 ),
                 
                 # Row 3: Year range slider
                 html.Div([
-                    html.Label('Release Year Range:', style={'color': '#ccc', 'marginBottom': '8px', 'fontSize': '0.9rem'}),
+                    html.Label('Release Year Range:', style={'color': 'var(--muted-text)', 'marginBottom': '8px', 'fontSize': '0.9rem'}),
                     dcc.RangeSlider(
                         id='year-range',
                         min=int(df['release_year'].min()),
@@ -175,14 +184,14 @@ layout = html.Div(
                 children=['View Quick Stats'],
                 style={
                     'padding': '10px 24px',
-                    'backgroundColor': '#333',
-                    'color': 'white',
-                    'border': '1px solid #555',
+                    'backgroundColor': 'var(--button-secondary)',
+                    'color': 'var(--button-secondary-text)',
+                    'border': '1px solid var(--border-color)',
                     'borderRadius': '6px',
                     'cursor': 'pointer',
                     'fontSize': '0.95rem',
                     'fontWeight': '600',
-                    'boxShadow': '0 2px 8px rgba(0,0,0,0.3)',
+                    'boxShadow': '0 2px 8px var(--border-color)',
                     'transition': 'all 0.3s ease'
                 }
             ),
@@ -194,7 +203,7 @@ layout = html.Div(
         # --- SORT & EXPORT OPTIONS ---
         html.Div([
             html.Div([
-                html.Label('Sort by: ', style={'color': '#ccc', 'marginRight': '10px', 'fontSize': '0.95rem'}),
+                html.Label('Sort by: ', style={'color': 'var(--muted-text)', 'marginRight': '10px', 'fontSize': '0.95rem'}),
                 dcc.Dropdown(
                     id='sort-by',
                     options=[
@@ -208,22 +217,22 @@ layout = html.Div(
                     value='added_desc',
                     style={
                         'width': '250px',
-                        'backgroundColor': 'var(--background-color)',
-                        'color': 'white'
+                        'backgroundColor': 'var(--dropdown-bg)',
+                        'color': 'var(--dropdown-text)'
                     }
                 ),
             ], style={'display': 'flex', 'alignItems': 'center'}),
             
             html.Div([
-                html.Div(id='content-count', style={'color': '#ccc', 'fontSize': '1.05rem', 'marginRight': '20px'}),
+                html.Div(id='content-count', style={'color': 'var(--muted-text)', 'fontSize': '1.05rem', 'marginRight': '20px'}),
                 html.Button(
                     'Export CSV',
                     id='export-button',
                     n_clicks=0,
                     style={
                         'padding': '8px 20px',
-                        'backgroundColor': '#444',
-                        'color': 'white',
+                        'backgroundColor': 'var(--button-secondary)',
+                        'color': 'var(--button-secondary-text)',
                         'border': 'none',
                         'borderRadius': '6px',
                         'cursor': 'pointer',
@@ -409,18 +418,16 @@ layout = html.Div(
         ),
         
         # --- VIEW DETAILS INSTRUCTIONS ---
-        html.P(
+                html.P(
             "Click on any row to view full details",
             style={
                 'textAlign': 'center',
-                'color': '#888',
+                'color': 'var(--muted-text)',
                 'fontSize': '0.9rem',
                 'fontStyle': 'italic',
                 'marginBottom': '40px'
             }
-        ),
-
-        # --- POPUP MODAL ---
+        ),        # --- POPUP MODAL ---
         html.Div(
             id='detail-popup',
             style={'display': 'none'},
@@ -609,22 +616,22 @@ def update_table(search, type_, country, genre, rating, year_range, sort_by, sta
             html.Div([
                 html.Div([
                     html.H3(f"{movies:,}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.8rem'}),
-                    html.P("Movies", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
+                    html.P("Movies", style={'color': 'var(--muted-text)', 'margin': '0', 'fontSize': '0.9rem'})
                 ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
                 
                 html.Div([
                     html.H3(f"{shows:,}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.8rem'}),
-                    html.P("TV Shows", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
+                    html.P("TV Shows", style={'color': 'var(--muted-text)', 'margin': '0', 'fontSize': '0.9rem'})
                 ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
                 
                 html.Div([
                     html.H3(f"{avg_year:.0f}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.8rem'}),
-                    html.P("Avg Release Year", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
+                    html.P("Avg Release Year", style={'color': 'var(--muted-text)', 'margin': '0', 'fontSize': '0.9rem'})
                 ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
                 
                 html.Div([
                     html.H3(f"{top_country}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.5rem'}),
-                    html.P("Top Country", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
+                    html.P("Top Country", style={'color': 'var(--muted-text)', 'margin': '0', 'fontSize': '0.9rem'})
                 ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
             ], style={'display': 'grid', 'gridTemplateColumns': 'repeat(4, 1fr)', 'gap': '15px', 'width': '95%', 'margin': 'auto'})
         ], style={'marginBottom': '25px'})
@@ -743,15 +750,15 @@ def show_movie_details(active_cell, close_click, table_data, current_popup_style
         
         # Description
         html.Div([
-            html.P(
+                html.P(
                 full['description'],
                 style={
-                    'color': '#ddd',
+                    'color': 'var(--font-color)',
                     'lineHeight': '1.8',
                     'fontSize': '1.05rem',
                     'marginBottom': '30px',
                     'paddingBottom': '20px',
-                    'borderBottom': '1px solid #333'
+                    'borderBottom': '1px solid var(--border-color)'
                 }
             ),
         ]),
@@ -761,22 +768,22 @@ def show_movie_details(active_cell, close_click, table_data, current_popup_style
             # Left column
             html.Div([
                 html.Div([
-                    html.Div('Rating', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Rating', style={'color': 'var(--muted-text)', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['rating'], style={'color': 'white', 'fontSize': '1.1rem', 'fontWeight': '600'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('Release Year', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Release Year', style={'color': 'var(--muted-text)', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(str(full['release_year']), style={'color': 'white', 'fontSize': '1.1rem', 'fontWeight': '600'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('Duration', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Duration', style={'color': 'var(--muted-text)', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['duration'], style={'color': 'white', 'fontSize': '1.1rem', 'fontWeight': '600'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('Country', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Country', style={'color': 'var(--muted-text)', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['country'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '20px'}),
             ], style={'flex': '1', 'paddingRight': '30px'}),
@@ -784,17 +791,17 @@ def show_movie_details(active_cell, close_click, table_data, current_popup_style
             # Right column
             html.Div([
                 html.Div([
-                    html.Div('Genres', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Genres', style={'color': 'var(--muted-text)', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['listed_in'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('Director', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Director', style={'color': 'var(--muted-text)', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['director'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('Cast', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Cast', style={'color': 'var(--muted-text)', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['cast'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '0'}),
             ], style={'flex': '1'}),
