@@ -18,34 +18,79 @@ app.layout = dbc.Container([
 
     # page container
     html.Div(
-        children=[     
+    children=[     
+        # --- NAVBAR (Fixed Left Sidebar) ---
+        html.Div(
+            children=[
+                html.Div(style={'height': '1px'}),  # small spacing
+                html.Div(
+                    children=[
+                        dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab1.svg'), id='tab-icon-1', className='tab-icon')),
+                        dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab2.svg'), id='tab-icon-2', className='tab-icon')),
+                        dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab3.svg'), id='tab-icon-3', className='tab-icon')),
+                        dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab4.svg'), id='tab-icon-4', className='tab-icon')),
+                        dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab5.svg'), id='tab-icon-5', className='tab-icon')),
+                        dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab6.svg'), id='tab-icon-6', className='tab-icon')),
+                        dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab7.svg'), id='tab-icon-7', className='tab-icon')),
+                    ],
+                    className='tabs',
+                    style={
+                        'display': 'flex',
+                        'flexDirection': 'column',
+                        'alignItems': 'center',
+                        'gap': '20px',
+                        'marginTop': '40px'
+                    }
+                ),
+                dbc.NavItem(
+                    html.Img(
+                        src=app.get_asset_url('Theme.svg'),
+                        id='theme-switcher',
+                        className='theme-switcher-icon',
+                        style={
+                            'width': '30px',
+                            'height': '30px',
+                            'cursor': 'pointer',
+                            'marginTop': '40px'
+                        }
+                    )
+                ),
+            ],
+            className='nav-icons',
+            style={
+                'position': 'fixed',        # stays fixed on screen
+                'top': '0',
+                'left': '0',
+                'height': '100vh',          # full height
+                'width': '40px',            # sidebar width
+                'backgroundColor': 'var(--background-color)',
+                'display': 'flex',
+                'flexDirection': 'column',
+                'alignItems': 'center',
+                'justifyContent': 'flex-start',
+                'paddingTop': '20px',
+                'paddingBottom': '20px',
+                'boxShadow': '2px 0 10px rgba(0,0,0,0.3)',
+                'zIndex': '1000'
+            }
+        ),
 
-            # navbar   
-            html.Div(
-                children=[
-                    html.Div(style={'height': '1px'}),
-                    html.Div(
-                        children=[
-                            dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab1.svg'), id='tab-icon-1', className='tab-icon')),
-                            dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab2.svg'), id='tab-icon-2', className='tab-icon')),
-                            dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab3.svg'), id='tab-icon-3', className='tab-icon')),
-                            dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab4.svg'), id='tab-icon-4', className='tab-icon')),
-                            dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab5.svg'), id='tab-icon-5', className='tab-icon')),
-                            dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab6.svg'), id='tab-icon-6', className='tab-icon')),
-                            dbc.NavItem(html.Img(src=app.get_asset_url('Tab/Tab7.svg'), id='tab-icon-7', className='tab-icon')),
-                        ],
-                        className='tabs'
-                    ),
-                    dbc.NavItem(html.Img(src=app.get_asset_url('Theme.svg'), id='theme-switcher', className='theme-switcher-icon'))
-                ],
-                className='nav-icons',
-            ),
-
-            # page-content
-            html.Div(id='page-content'),
-        ],
-        className='container'
-    ),
+        # --- PAGE CONTENT (shifted right of sidebar) ---
+        html.Div(
+            id='page-content',
+            style={
+                'marginLeft': '100px',       # creates space for fixed sidebar
+                'padding': '20px',
+                'width': 'calc(100% - 100px)',
+                'overflowY': 'auto',
+                'minHeight': '100vh',
+                'backgroundColor': 'var(--background-color)',
+            }
+        ),
+    ],
+    className='container'
+)
+,
     dcc.Store(id='current-theme', data='dark'),
 ], fluid=True, className="dashboard-container")
 

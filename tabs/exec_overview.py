@@ -22,7 +22,7 @@ country_normalized_counts = country_list.value_counts(normalize=True)
 shannon_index = -np.sum(country_normalized_counts * np.log2(country_normalized_counts))  # Shannon diversity index
 
 titles = df['title'].count()
-countries = df['country'].dropna().count()
+countries = country_list.nunique()
 start_value = year_counts['Count'].iloc[0]
 end_value = year_counts['Count'].iloc[-1]
 num_years = len(year_counts) - 1

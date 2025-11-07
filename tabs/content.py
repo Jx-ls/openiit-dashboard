@@ -68,7 +68,7 @@ layout = html.Div(
                             'padding': '12px 15px',
                             'borderRadius': '8px',
                             'border': '1px solid rgba(229,9,20,0.5)',
-                            'backgroundColor': '#1b1b1b',
+                            'backgroundColor': 'var(--background-color)',
                             'color': 'white',
                             'fontSize': '1rem',
                             'boxShadow': 'inset 0 0 8px rgba(229,9,20,0.1)',
@@ -85,7 +85,7 @@ layout = html.Div(
                     placeholder='Type',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': '#1b1b1b',
+                        'backgroundColor': 'var(--background-color)',
                         'color': 'white',
                     }
                 ),
@@ -96,7 +96,7 @@ layout = html.Div(
                     placeholder='Country',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': '#1b1b1b',
+                        'backgroundColor': 'var(--background-color)',
                         'color': 'white',
                     }
                 ),
@@ -107,7 +107,7 @@ layout = html.Div(
                     placeholder='Genre',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': '#1b1b1b',
+                        'backgroundColor': 'var(--background-color)',
                         'color': 'white',
                     }
                 ),
@@ -118,7 +118,7 @@ layout = html.Div(
                     placeholder='Rating',
                     className='filter-dropdown',
                     style={
-                        'backgroundColor': '#1b1b1b',
+                        'backgroundColor': 'var(--background-color)',
                         'color': 'white',
                     }
                 ),
@@ -208,7 +208,7 @@ layout = html.Div(
                     value='added_desc',
                     style={
                         'width': '250px',
-                        'backgroundColor': '#1b1b1b',
+                        'backgroundColor': 'var(--background-color)',
                         'color': 'white'
                     }
                 ),
@@ -302,11 +302,11 @@ layout = html.Div(
                     },
                     {
                         'selector': '.Select-menu-outer',
-                        'rule': 'background-color: #1b1b1b !important; border: 1px solid #555 !important;'
+                        'rule': 'background-color: var(--background-color) !important; border: 1px solid #555 !important;'
                     },
                     {
                         'selector': '.Select-option',
-                        'rule': 'background-color: #1b1b1b !important; color: white !important;'
+                        'rule': 'background-color: var(--background-color) !important; color: white !important;'
                     },
                     {
                         'selector': '.Select-option:hover',
@@ -314,7 +314,7 @@ layout = html.Div(
                     },
                     {
                         'selector': '.paging-container',
-                        'rule': 'background-color: #1b1b1b !important; border-top: 1px solid rgba(255, 255, 255, 0.1) !important; padding: 20px 24px !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 12px !important; border-radius: 0 !important; min-height: 70px !important;'
+                        'rule': 'background-color: var(--background-color) !important; border-top: 1px solid rgba(255, 255, 255, 0.1) !important; padding: 20px 24px !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 12px !important; border-radius: 0 !important; min-height: 70px !important;'
                     },
                     {
                         'selector': '.paging-container button',
@@ -449,7 +449,7 @@ layout = html.Div(
                         'top': '50%',
                         'left': '50%',
                         'transform': 'translate(-50%, -50%) scale(0.7)',
-                        'backgroundColor': '#1b1b1b',
+                        'backgroundColor': 'var(--background-color)',
                         'padding': '0',
                         'borderRadius': '15px',
                         'boxShadow': '0 10px 40px rgba(229, 9, 20, 0.5)',
@@ -496,7 +496,7 @@ layout = html.Div(
 
     ],
     style={
-        'backgroundColor': '#121212',
+        'backgroundColor': 'var(--background-color)',
         'minHeight': '100vh',
         'padding': '50px 10px',
         'overflowX': 'hidden'
@@ -610,22 +610,22 @@ def update_table(search, type_, country, genre, rating, year_range, sort_by, sta
                 html.Div([
                     html.H3(f"{movies:,}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.8rem'}),
                     html.P("Movies", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
-                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': '#1b1b1b', 'borderRadius': '8px'}),
+                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
                 
                 html.Div([
                     html.H3(f"{shows:,}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.8rem'}),
                     html.P("TV Shows", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
-                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': '#1b1b1b', 'borderRadius': '8px'}),
+                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
                 
                 html.Div([
                     html.H3(f"{avg_year:.0f}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.8rem'}),
                     html.P("Avg Release Year", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
-                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': '#1b1b1b', 'borderRadius': '8px'}),
+                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
                 
                 html.Div([
                     html.H3(f"{top_country}", style={'color': '#E50914', 'margin': '0', 'fontSize': '1.5rem'}),
                     html.P("Top Country", style={'color': '#ccc', 'margin': '0', 'fontSize': '0.9rem'})
-                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': '#1b1b1b', 'borderRadius': '8px'}),
+                ], style={'textAlign': 'center', 'padding': '15px', 'backgroundColor': 'var(--background-color)', 'borderRadius': '8px'}),
             ], style={'display': 'grid', 'gridTemplateColumns': 'repeat(4, 1fr)', 'gap': '15px', 'width': '95%', 'margin': 'auto'})
         ], style={'marginBottom': '25px'})
 
@@ -688,7 +688,7 @@ def show_movie_details(active_cell, close_click, table_data, current_popup_style
     content_hidden = {
         'position': 'fixed', 'top': '50%', 'left': '50%',
         'transform': 'translate(-50%, -50%) scale(0.7)',
-        'backgroundColor': '#1b1b1b', 'padding': '0', 'borderRadius': '15px',
+        'backgroundColor': 'var(--background-color)', 'padding': '0', 'borderRadius': '15px',
         'boxShadow': '0 10px 40px rgba(229, 9, 20, 0.5)', 'zIndex': 9999,
         'width': '90%', 'maxWidth': '900px', 'maxHeight': '85vh',
         'overflowY': 'auto', 'border': '2px solid #E50914',

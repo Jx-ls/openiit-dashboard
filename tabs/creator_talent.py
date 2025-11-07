@@ -79,37 +79,46 @@ NAME_ROLE = (
 
 
 # ---------- Rising Stars Computation ----------
+# ---------- Rising Stars Computation (correct: use release_year, not year_added) ----------
 RECENT_YEARS = 5
-max_year_added = int(pd.Series(df['year_added']).dropna().max()) if pd.Series(df['year_added']).notna().any() else None
+# latest release year in your dataset
+max_rel_year = int(creators_df['release_year'].dropna().max()) if creators_df['release_year'].notna().any() else None
 
-if max_year_added:
-    recent_cut = max_year_added - RECENT_YEARS + 1
+if max_rel_year:
+    recent_cut = max_rel_year - RECENT_YEARS + 1
 
-    # Group by creator
-    grp = creators_df.dropna(subset=['year_added']).groupby(['name'])
+    # only rows with a real release year
+    grp = creators_df.dropna(subset=['release_year']).groupby('name', as_index=True)
 
-    # Count recent and old works
-    stats_recent = grp.apply(lambda g: (g['year_added'] >= recent_cut).sum()).rename('recent_count')
-    stats_old = grp.apply(lambda g: (g['year_added'] < recent_cut).sum()).rename('old_count')
-    stats_total = grp.size().rename('total_count')
+    stats = grp['release_year'].agg(
+        recent_count=lambda s: (s >= recent_cut).sum(),
+        old_count=lambda s: (s < recent_cut).sum(),
+        total_count='count',
+        first_release='min',
+        last_release='max'
+    )
 
-    rising = pd.concat([stats_recent, stats_old, stats_total], axis=1).fillna(0)
+    # True newcomers: first ever work is within the last RECENT_YEARS
+    rising = stats[
+        (stats['first_release'] >= recent_cut) &   # started recently (excludes veterans like Anupam Kher)
+        (stats['recent_count'] >= 2) &             # at least 2 recent titles
+        (stats['total_count'] >= 2)                # at least 2 total titles
+    ].copy()
 
-    # Rising score: high recent count, low old count
-    rising['rising_score'] = (rising['recent_count'] / rising['total_count']) * (1 / (1 + rising['old_count']))
+    # Score: emphasize volume and recency span within window
+    rising['rising_score'] = (
+        (rising['recent_count'] / rising['total_count']) *
+        (1 + (rising['last_release'] - rising['first_release']) / max(1, RECENT_YEARS - 1))
+    )
 
-    # Filter for meaningful candidates
-    rising = rising[
-        (rising['recent_count'] >= 2) &            # at least 2 recent works
-        (rising['total_count'] >= 2) &             # at least 2 total works
-        (rising['old_count'] == 0)                 # true newcomers: no old works
-    ]
-
-    # Rank and take top 10
-    rising_top10 = rising.sort_values(['rising_score', 'recent_count'], ascending=[False, False]).head(10).reset_index()
-
+    rising_top10 = (
+        rising.sort_values(['rising_score', 'recent_count'], ascending=[False, False])
+              .head(10)
+              .reset_index()
+    )
 else:
     rising_top10 = pd.DataFrame(columns=['name', 'recent_count', 'old_count', 'total_count', 'rising_score'])
+
 
 
 
@@ -249,19 +258,41 @@ layout = html.Div(
                     }
                 ),
                 html.Div(
-                    dcc.Graph(id='rising-stars-bar', figure={}, config={'displayModeBar': False}),
-                    className='chart-card',
+                    [
+                        html.P(
+                            "Rising Stars (5+)",
+                            style={
+                                'textAlign': 'center',
+                                'fontWeight': 'bold',
+                                'fontSize': '1.2rem',
+                                'color': 'var(--font-color)',
+                                'marginBottom': '10px'
+                            }
+                        ),
+                        html.Div(
+                            dcc.Graph(id='rising-stars-bar', figure={}, config={'displayModeBar': False}),
+                            className='chart-card',
+                            style={
+                                'flex': '1',
+                                'margin': '10px',
+                                'background': 'var(--graph-color)',
+                                'backdropFilter': 'blur(8px)',
+                                'borderRadius': '16px',
+                                'padding': '30px',
+                                'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
+                                'minWidth': '40%'
+                            }
+                        ),
+                    ],
                     style={
-                        'flex': '1',
-                        'margin': '10px',
-                        'background': 'var(--graph-color)',
-                        'backdropFilter': 'blur(8px)',
-                        'borderRadius': '16px',
-                        'padding': '30px',
-                        'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
-                        'minWidth': '40%'
+                        'display': 'flex',
+                        'flexDirection': 'column',
+                        'alignItems': 'center',
+                        'justifyContent': 'center',
+                        'width': '100%',
                     }
-                ),
+                )
+
             ],
             style={
                 'display': 'flex',
