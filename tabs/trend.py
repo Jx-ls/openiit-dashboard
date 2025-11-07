@@ -145,11 +145,11 @@ layout = html.Div(
 )
 
 @callback(
-        Output('trend-growth-graph', 'figure', allow_duplicate=True),
-        Output('trend-genre-graph', 'figure', allow_duplicate=True),
-        Output('trend-month-graph', 'figure', allow_duplicate=True),
-        Output('trend-emerging-graph', 'figure', allow_duplicate=True),
-        Input('trend-type-dropdown', 'value', allow_duplicate=True),
+        Output('trend-growth-graph', 'figure'),
+        Output('trend-genre-graph', 'figure'),
+        Output('trend-month-graph', 'figure'),
+        Output('trend-emerging-graph', 'figure'),
+        Input('trend-type-dropdown', 'value'),
         Input('current_theme', 'data')
     )
 def update_trend_charts(selected_type):
