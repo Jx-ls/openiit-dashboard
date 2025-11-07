@@ -7,6 +7,9 @@
     --graph-color: var(--black);
     --netflix-dark-color: #B00710;
     --body-color: #FFFFFF;
+    --cell-color: #FFFFFF;
+    --conditional-cell-color: #c1b8b8;
+    --hover-cell-color: #FFFFFF
 }
 
 .tab-icon, .theme-switcher-icon {

@@ -41,7 +41,7 @@ layout = html.Div(
             style={
                 'textAlign': 'center',
                 'fontFamily': 'Segoe UI, sans-serif',
-                'color': 'white',
+                'color': 'var(--font-color)',
                 'fontWeight': '700',
                 'fontSize': '2.5rem',
                 'marginBottom': '10px',
@@ -152,7 +152,7 @@ layout = html.Div(
         # --- ACTION BUTTONS ---
         html.Div([
             html.Button(
-                '🔄 Reset Filters',
+                'Reset Filters',
                 id='reset-button',
                 n_clicks=0,
                 style={
@@ -172,7 +172,7 @@ layout = html.Div(
             html.Button(
                 id='stats-button',
                 n_clicks=0,
-                children=['📊 View Quick Stats'],
+                children=['View Quick Stats'],
                 style={
                     'padding': '10px 24px',
                     'backgroundColor': '#333',
@@ -217,7 +217,7 @@ layout = html.Div(
             html.Div([
                 html.Div(id='content-count', style={'color': '#ccc', 'fontSize': '1.05rem', 'marginRight': '20px'}),
                 html.Button(
-                    '📥 Export CSV',
+                    'Export CSV',
                     id='export-button',
                     n_clicks=0,
                     style={
@@ -269,8 +269,8 @@ layout = html.Div(
                     'height': '45px'
                 },
                 style_cell={
-                    'backgroundColor': '#181818',
-                    'color': 'white',
+                    'backgroundColor': 'var(--cell-color)',
+                    'color': 'var(--font-color)',
                     'textAlign': 'left',
                     'padding': '12px 10px',
                     'fontFamily': 'Segoe UI',
@@ -283,14 +283,14 @@ layout = html.Div(
                 style_data_conditional=[
                     {
                         'if': {'row_index': 'odd'},
-                        'backgroundColor': '#202020'
+                        'backgroundColor': 'var(--conditional-cell-color)'
                     },
                     
                 ],
                 css=[
                     {
                         'selector': 'tr:hover td',
-                        'rule': 'background-color: #2a2a2a !important; cursor: pointer !important;'
+                        'rule': 'background-color: var(--hover-cell-color) !important; cursor: pointer !important;'
                     },
                     {
                         'selector': '.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td',
@@ -298,7 +298,7 @@ layout = html.Div(
                     },
                     {
                         'selector': '.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td.focused',
-                        'rule': 'background-color: #2a2a2a; border: white !important; outline: none !important;'
+                        'rule': 'background-color: var(--hover-cell-color); border: white !important; outline: none !important;'
                     },
                     {
                         'selector': '.Select-menu-outer',
@@ -326,7 +326,7 @@ layout = html.Div(
                     },
                     {
                         'selector': '.paging-container button:disabled',
-                        'rule': 'background-color: #1a1a1a !important; color: #666 !important; border-color: #2a2a2a !important; cursor: not-allowed !important; opacity: 0.5 !important;'
+                        'rule': 'background-color: #1a1a1a !important; color: #666 !important; border-color: var(--hover-cell-color) !important; cursor: not-allowed !important; opacity: 0.5 !important;'
                     },
                     {
                         'selector': '.paging-container .current-page',
@@ -581,7 +581,7 @@ def update_table(search, type_, country, genre, rating, year_range, sort_by, sta
     
     # Quick stats (show when button clicked - toggle)
     stats_panel = None
-    button_text = '📊 View Quick Stats'
+    button_text = 'View Quick Stats'
     button_style = {
         'padding': '10px 24px',
         'backgroundColor': '#333',
@@ -596,7 +596,7 @@ def update_table(search, type_, country, genre, rating, year_range, sort_by, sta
     }
     
     if show_stats:
-        button_text = '📊 Hide Quick Stats'
+        button_text = 'Hide Quick Stats'
         button_style['backgroundColor'] = '#E50914'
         button_style['border'] = '1px solid #E50914'
         
@@ -761,22 +761,22 @@ def show_movie_details(active_cell, close_click, table_data, current_popup_style
             # Left column
             html.Div([
                 html.Div([
-                    html.Div('⭐ Rating', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Rating', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['rating'], style={'color': 'white', 'fontSize': '1.1rem', 'fontWeight': '600'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('📅 Release Year', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Release Year', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(str(full['release_year']), style={'color': 'white', 'fontSize': '1.1rem', 'fontWeight': '600'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('⏱ Duration', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Duration', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['duration'], style={'color': 'white', 'fontSize': '1.1rem', 'fontWeight': '600'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('🌍 Country', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Country', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['country'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '20px'}),
             ], style={'flex': '1', 'paddingRight': '30px'}),
@@ -784,17 +784,17 @@ def show_movie_details(active_cell, close_click, table_data, current_popup_style
             # Right column
             html.Div([
                 html.Div([
-                    html.Div('🎭 Genres', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Genres', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['listed_in'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('🎥 Director', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Director', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['director'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '20px'}),
                 
                 html.Div([
-                    html.Div('👥 Cast', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
+                    html.Div('Cast', style={'color': '#999', 'fontSize': '0.85rem', 'marginBottom': '5px'}),
                     html.Div(full['cast'], style={'color': 'white', 'fontSize': '1.05rem', 'lineHeight': '1.5'})
                 ], style={'marginBottom': '0'}),
             ], style={'flex': '1'}),

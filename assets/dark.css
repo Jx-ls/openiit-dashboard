@@ -6,6 +6,9 @@
     --font-color: var(--white);
     --graph-color: rgba(30,30,30,0.85);
     --body-color: #1e1e1e;
+    --cell-color: #181818;
+    --conditional-cell-color: #202020;
+    --hover-cell-color: #2a2a2a;
 }
 
 .tab-icon, .theme-switcher-icon {
