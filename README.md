@@ -1,4 +1,4 @@
-# Team Sigmoid
+# Team 13
 ## OpenIIT Dashboard
 
 This project is a data-driven dashboard built with [Dash](https://dash.plotly.com/) designed for interactive analytics and visualization of the provided **Netflix** data. It features a sidebar navigation with seven tabs, each representing a different analytical view, and the last button supports dynamic theme switching (dark/light).
@@ -16,6 +16,9 @@ This project is a data-driven dashboard built with [Dash](https://dash.plotly.co
 - **Theme Switcher:** Toggle between dark and light themes.
 - **Modular Code:** Each tab's layout and callbacks are defined in separate files under `tabs/`.
 - **Custom Styling:** Uses CSS files in `assets/` for theming and layout.
+
+### Live Link
+Check out our hosted website here: [Dashboard](https://openiit-dashboard.onrender.com)
 
 ### Project Structure
 

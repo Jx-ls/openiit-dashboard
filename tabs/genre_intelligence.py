@@ -140,7 +140,9 @@ layout = html.Div([
     'padding': '40px 0',
     'minHeight': '100vh',
     'width': '100%',
-    'overflowX': 'hidden'
+    'overflowX': 'hidden',
+    'fontFamily': 'Segoe UI, sans-serif',
+
 })
 
 
