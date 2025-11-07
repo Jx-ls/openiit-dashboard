@@ -3,10 +3,9 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 
-# Load data
+# Loadind and Processing data
 df = pd.read_csv('./data/netflix_titles.csv')
 
-# Process data
 # Type data
 type_counts = df['type'].value_counts().reset_index()
 type_counts.columns = ['Type', 'Count']
@@ -14,6 +13,15 @@ type_counts.columns = ['Type', 'Count']
 # year data
 year_counts = df['release_year'].value_counts().sort_index().reset_index()
 year_counts.columns = ['Release Year', 'Count']
+
+df['date_added'] = pd.to_datetime(df['date_added'].str.strip(), format='%B %d, %Y', errors='coerce')
+df['year_added'] = df['date_added'].dt.year
+content_trends = df.groupby(['year_added', 'type']).size().reset_index(name='Count')
+content_trends = content_trends[
+    (content_trends['year_added'] > 2010) &
+    (content_trends['year_added'] < content_trends['year_added'].max())
+]
+
 
 # country data
 country_list = df["country"].str.split(",").explode().str.strip()  # parsing multiple countries and adding them to the count
@@ -179,6 +187,8 @@ fig_lang_bar = px.bar(
     lang_df,
     x=lang_df['Language'],
     y=lang_df['Count'],
+    color='Count',
+     color_continuous_scale=['#B20710', "#EB1D27"]
 )
 fig_lang_bar.update_layout(
     title=dict(
@@ -202,20 +212,13 @@ fig_lang_bar.update_layout(
 )
 
 # --- Content Volume Trends Over Time ---
-df['date_added'] = pd.to_datetime(df['date_added'].str.strip(), format='%B %d, %Y', errors='coerce')
-df['year_added'] = df['date_added'].dt.year
-content_trends = df.groupby(['year_added', 'type']).size().reset_index(name='Count')
-content_trends = content_trends[
-    (content_trends['year_added'] > 2010) &
-    (content_trends['year_added'] < content_trends['year_added'].max())
-]
 
 fig_line = px.line(
     content_trends,
     x='year_added',
     y='Count',
     color='type',
-    title='📈 Content Volume Added to Netflix (2011-Present)',
+    title=' Content Volume Added to Netflix (2011-Present)',
     markers=True,
     color_discrete_map={'Movie': '#E50914', 'TV Show': '#B00000'}
 )
@@ -252,7 +255,7 @@ fig_genre_bar = px.bar(
     x='Count',
     y='Genre',
     orientation='h',
-    title='🎭 Top 20 Genres on Netflix',
+    title=' Top 20 Genres on Netflix',
     color='Count',
     color_continuous_scale='Reds'
 )
