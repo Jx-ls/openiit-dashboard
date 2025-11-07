@@ -142,15 +142,14 @@ layout = html.Div(
             id='creator-search',
             options=[{'label': name, 'value': name} for name in creator_names],
             placeholder='Search for a director or actor...',
-            style={
-                'width': '50%',
-                'margin': '20px auto',
-                'color': 'var(--font-color)',
-                'backgroundColor': 'var(--background-color)'
-            },
             value='Anupam Kher',
             searchable=True,
-            clearable=True
+            clearable=True,
+            style={
+                'width': '80%',
+                'margin': '20px auto',
+                'color': 'var(--font-color)',
+            },
         ),
         html.Div(
             [

@@ -6,6 +6,7 @@
     --font-color: var(--white);
     --graph-color: var(--black);
     --netflix-dark-color: #B00710;
+    --body-color: #FFFFFF;
 }
 
 .tab-icon, .theme-switcher-icon {

@@ -5,6 +5,7 @@
     --background-color: #0F0F0F;
     --font-color: var(--white);
     --graph-color: rgba(30,30,30,0.85);
+    --body-color: #1e1e1e;
 }
 
 .tab-icon, .theme-switcher-icon {
