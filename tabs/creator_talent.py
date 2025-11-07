@@ -61,6 +61,34 @@ for _, row in df.iterrows():
 creators_df = pd.DataFrame(dir_rows + act_rows)
 creator_names = sorted(creators_df['name'].dropna().unique().tolist())
 
+# ---------- FAST PRECOMPUTE FOR CYTOSCAPE ----------
+from collections import defaultdict, Counter
+
+# Map each title -> set of people (director + cast)
+TITLE_PEOPLE = {}
+for _, row in df.iterrows():
+    people = set()
+    if isinstance(row.get('director', ''), str) and row['director'].strip():
+        people.add(row['director'].strip())
+    people.update(split_people(row.get('cast', '')))
+    if people:
+        TITLE_PEOPLE[row['title']] = people
+
+# Map each person -> list of titles they appear in
+NAME_TITLES = defaultdict(list)
+for title, people in TITLE_PEOPLE.items():
+    for p in people:
+        NAME_TITLES[p].append(title)
+
+# Person -> primary role (mode), fallback 'Actor'
+NAME_ROLE = (
+    creators_df.drop_duplicates(['name', 'role'])
+    .groupby('name')['role']
+    .agg(lambda s: s.mode().iloc[0] if not s.mode().empty else 'Actor')
+    .to_dict()
+)
+
+
 # ---------- Rising Stars Computation ----------
 # ---------- Improved Rising Stars Computation ----------
 RECENT_YEARS = 5
@@ -122,7 +150,8 @@ layout = html.Div(
             style={
                 'width': '50%',
                 'margin': '20px auto',
-                'color': 'black'
+                'color': 'var(--font-color)',
+                'backgroundColor': 'var(--background-color)'
             },
             value='Anupam Kher',
             searchable=True,
@@ -280,11 +309,28 @@ layout = html.Div(
 # ----------------------------------------------------------
 # Callbacks
 # ----------------------------------------------------------
-@callback(Output("bar-chart", "figure"), Input('creator-search', "value"))
-def generate_genre_bar_graph(selected_name):
+@callback(
+    Output("bar-chart", "figure", allow_duplicate=True),
+    [Input('creator-search', "value"),
+     Input('current-theme', 'data')],
+    prevent_initial_call='initial_duplicate'
+)
+def generate_genre_bar_graph(selected_name, current_theme):
+    # Choose colors dynamically
+    if current_theme == 'light':
+        text_color = '#0F0F0F'
+        bg_color = '#FFFFFF'
+    else:
+        text_color = '#FFFFFF'
+        bg_color = 'rgba(0,0,0,0)'
+
     if not selected_name:
         fig = px.bar(pd.DataFrame({'x': [], 'y': []}), x='x', y='y')
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig.update_layout(
+            paper_bgcolor=bg_color,
+            plot_bgcolor=bg_color,
+            font_color=text_color
+        )
         return fig
 
     sub_df = creators_df[creators_df['name'] == selected_name]
@@ -292,62 +338,112 @@ def generate_genre_bar_graph(selected_name):
 
     if not all_genres:
         fig = px.bar(title=f"No genre data available for {selected_name}")
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='var(--font-color)')
+        fig.update_layout(
+            paper_bgcolor=bg_color,
+            plot_bgcolor=bg_color,
+            font_color=text_color
+        )
         return fig
 
     genre_counts = pd.Series(all_genres).value_counts().reset_index()
     genre_counts.columns = ['Genre', 'Count']
 
-    fig = px.bar(genre_counts, x='Genre', y='Count', title=f"Genre Distribution for {selected_name}",
-                 text='Count', color_discrete_sequence=['#E50914'])
+    fig = px.bar(
+        genre_counts,
+        x='Genre',
+        y='Count',
+        title=f"Genre Distribution for {selected_name}",
+        text='Count',
+        color_discrete_sequence=['#E50914']
+    )
     fig.update_traces(textposition='outside')
     fig.update_layout(
         xaxis_title='Genre',
         yaxis_title='Count',
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color='var(--font-color)',
-        title_font=dict(size=20, color='var(--font-color)'),
+        paper_bgcolor=bg_color,
+        plot_bgcolor=bg_color,
+        font_color=text_color,
+        title_font=dict(size=20, color=text_color),
         margin=dict(l=40, r=20, t=60, b=60)
     )
     return fig
 
 
-@callback(Output("pie-chart", "figure"), Input('creator-search', "value"))
-def generate_type_pie_chart(selected_name):
+# ----------------------------------------------------------
+# PIE CHART
+# ----------------------------------------------------------
+@callback(
+    Output("pie-chart", "figure", allow_duplicate=True),
+    [Input('creator-search', "value"),
+     Input('current-theme', 'data')],
+    prevent_initial_call='initial_duplicate'
+)
+def generate_type_pie_chart(selected_name, current_theme):
+    # Dynamic theme colors
+    if current_theme == 'light':
+        text_color = '#0F0F0F'
+        bg_color = '#FFFFFF'
+    else:
+        text_color = '#FFFFFF'
+        bg_color = 'rgba(0,0,0,0)'
+
     if not selected_name:
         fig = px.pie(pd.DataFrame({'x': [], 'y': []}), names='x', values='y')
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig.update_layout(paper_bgcolor=bg_color, plot_bgcolor=bg_color, font_color=text_color)
         return fig
 
     sub_df = creators_df[creators_df['name'] == selected_name]
     if sub_df.empty:
         fig = px.pie(pd.DataFrame({'x': [], 'y': []}), names='x', values='y')
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig.update_layout(paper_bgcolor=bg_color, plot_bgcolor=bg_color, font_color=text_color)
         return fig
 
     type_counts = sub_df['type'].value_counts().reset_index()
     type_counts.columns = ['Type', 'Count']
-    fig = px.pie(type_counts, names='Type', values='Count',
-                 title=f"Content Type Split for {selected_name}", hole=0.4,
-                 color_discrete_sequence=['#E50914', '#B81D24'])
+
+    fig = px.pie(
+        type_counts,
+        names='Type',
+        values='Count',
+        title=f"Content Type Split for {selected_name}",
+        hole=0.4,
+        color_discrete_sequence=['#E50914', '#B81D24']
+    )
     fig.update_traces(textinfo='label+percent', pull=[0.05]*len(type_counts))
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color='var(--font-color)',
-        title_font=dict(size=20, color='var(--font-color)'),
+        paper_bgcolor=bg_color,
+        plot_bgcolor=bg_color,
+        font_color=text_color,
+        title_font=dict(size=20, color=text_color),
         margin=dict(l=40, r=20, t=60, b=60),
-        legend=dict(title='', orientation='h', y=-0.1, font=dict(color='var(--font-color)'))
+        legend=dict(title='', orientation='h', y=-0.1, font=dict(color=text_color))
     )
     return fig
 
 
-@callback(Output("line-chart", "figure"), Input('creator-search', "value"))
-def generate_active_year_line_chart(selected_name):
+# ----------------------------------------------------------
+# LINE CHART
+# ----------------------------------------------------------
+@callback(
+    Output("line-chart", "figure", allow_duplicate=True),
+    [Input('creator-search', "value"),
+     Input('current-theme', 'data')],
+    prevent_initial_call='initial_duplicate'
+)
+def generate_active_year_line_chart(selected_name, current_theme):
+    # Theme colors
+    if current_theme == 'light':
+        text_color = '#0F0F0F'
+        bg_color = '#FFFFFF'
+        grid_color = '#CCCCCC'
+    else:
+        text_color = '#FFFFFF'
+        bg_color = 'rgba(0,0,0,0)'
+        grid_color = '#333333'
+
     if not selected_name:
         fig = px.line(pd.DataFrame({'x': [], 'y': []}), x='x', y='y')
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig.update_layout(paper_bgcolor=bg_color, plot_bgcolor=bg_color, font_color=text_color)
         return fig
 
     sub_df = creators_df[creators_df['name'] == selected_name]
@@ -360,93 +456,125 @@ def generate_active_year_line_chart(selected_name):
 
     if yearly_counts.empty:
         fig = px.line(pd.DataFrame({'x': [], 'y': []}), x='x', y='y')
-        fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig.update_layout(paper_bgcolor=bg_color, plot_bgcolor=bg_color, font_color=text_color)
         return fig
 
     fig = px.line(yearly_counts, x='release_year', y='Count',
                   title=f"Yearly Activity of {selected_name}", markers=True)
-    fig.update_traces(line=dict(width=3, color='#E50914'), marker=dict(size=8, color='#B81D24'))
+    fig.update_traces(line=dict(width=3, color='#E50914'),
+                      marker=dict(size=8, color='#B81D24'))
     fig.update_layout(
         yaxis_title='Titles',
-        xaxis=dict(
-            title='Release Year',
-            showgrid=False
-        ),
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color='var(--font-color)',
-        title_font=dict(size=20, color='var(--font-color)'),
+        xaxis=dict(title='Release Year', showgrid=False),
+        paper_bgcolor=bg_color,
+        plot_bgcolor=bg_color,
+        font_color=text_color,
+        title_font=dict(size=20, color=text_color),
         margin=dict(l=40, r=20, t=60, b=60),
-        hovermode='x unified'
+        hovermode='x unified',
+        yaxis=dict(gridcolor=grid_color)
     )
     return fig
 
 
-@callback(Output('rising-stars-bar', 'figure'), Input('creator-search', 'value'))
-def rising_stars(_):
+# ----------------------------------------------------------
+# RISING STARS BAR
+# ----------------------------------------------------------
+@callback(
+    Output('rising-stars-bar', 'figure', allow_duplicate=True),
+    [Input('creator-search', 'value'),
+     Input('current-theme', 'data')],
+    prevent_initial_call='initial_duplicate'
+)
+def rising_stars(_, current_theme):
+    # Theme colors
+    if current_theme == 'light':
+        text_color = '#0F0F0F'
+        bg_color = '#FFFFFF'
+        grid_color = '#CCCCCC'
+    else:
+        text_color = '#FFFFFF'
+        bg_color = 'rgba(0,0,0,0)'
+        grid_color = '#333333'
+
     if rising_top10.empty:
         fig = px.bar(title="Rising Stars (Insufficient Data)")
     else:
         plotdf = rising_top10.copy()
-        plotdf['Label'] = plotdf['name'] + ' (' + plotdf['recent_count'].astype(int).astype(str) + '/' + plotdf['total_count'].astype(int).astype(str) + ')'
-        fig = px.bar(plotdf, x='Label', y='rising_score', text='rising_score',
-                     title=f"Rising Stars (Last {RECENT_YEARS} Years)",
-                     color_discrete_sequence=['#E50914'])
+        plotdf['Label'] = (
+            plotdf['name'] + ' (' +
+            plotdf['recent_count'].astype(int).astype(str) + '/' +
+            plotdf['total_count'].astype(int).astype(str) + ')'
+        )
+        fig = px.bar(
+            plotdf,
+            x='Label',
+            y='rising_score',
+            text='rising_score',
+            title=f"Rising Stars (Last {RECENT_YEARS} Years)",
+            color_discrete_sequence=['#E50914']
+        )
         fig.update_traces(texttemplate='%{text:.2%}', textposition='outside')
         fig.update_xaxes(tickangle=45)
+
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_color='var(--font-color)',
+        paper_bgcolor=bg_color,
+        plot_bgcolor=bg_color,
+        font_color=text_color,
         margin=dict(l=40, r=20, t=60, b=120),
-        yaxis=dict(tickformat=".0%", gridcolor='#333333'),
-        title_font=dict(size=20, color='var(--font-color)')
+        yaxis=dict(tickformat=".0%", gridcolor=grid_color),
+        title_font=dict(size=20, color=text_color)
     )
     return fig
 
+from collections import Counter
 
-# ----------------------------------------------------------
-# Cytoscape Callback
-# ----------------------------------------------------------
+# Keep only the strongest connections so the graph doesn't explode
+MAX_NEIGHBORS = 35  # tweak if you want fewer/more nodes
+
 @callback(Output('collab-graph', 'elements'), Input('creator-search', 'value'))
-def build_collab_graph(selected_name):
+def build_collab_graph_fast(selected_name):
     if not selected_name:
         return []
 
-    involved_titles = creators_df[creators_df['name'] == selected_name]['title'].unique().tolist()
-    sub_df = df[df['title'].isin(involved_titles)]
+    # Titles for the selected person (O(1) hash lookups + small list)
+    titles = NAME_TITLES.get(selected_name, [])
+    if not titles:
+        # Node only, no edges
+        return [{'data': {'id': selected_name, 'label': selected_name, 'role': NAME_ROLE.get(selected_name, 'Actor')}}]
 
-    nodes, edges = {}, []
+    # Count collaborators by frequency across the user's titles
+    collab_counter = Counter()
+    for t in titles:
+        # people in that title (already pre-split)
+        for p in TITLE_PEOPLE.get(t, ()):
+            if p != selected_name:
+                collab_counter[p] += 1
 
-    sel_role = creators_df[creators_df['name'] == selected_name]['role'].mode()[0] if not creators_df[creators_df['name'] == selected_name].empty else 'Actor'
-    nodes[selected_name] = {'data': {'id': selected_name, 'label': selected_name, 'role': sel_role}}
+    # Keep only the strongest neighbors to keep the graph readable/snappy
+    MAX_NEIGHBORS = 35
+    top_collabs = [name for name, _ in collab_counter.most_common(MAX_NEIGHBORS)]
 
-    for _, row in sub_df.iterrows():
-        director = row['director'].strip() if isinstance(row['director'], str) else ''
-        cast = split_people(row['cast'])
+    # Nodes
+    elements = []
+    elements.append({
+        'data': {
+            'id': selected_name,
+            'label': selected_name,
+            'role': NAME_ROLE.get(selected_name, 'Actor')
+        }
+    })
+    for c in top_collabs:
+        elements.append({
+            'data': {
+                'id': c,
+                'label': c,
+                'role': NAME_ROLE.get(c, 'Actor')
+            }
+        })
 
-        if director and director not in nodes:
-            nodes[director] = {'data': {'id': director, 'label': director, 'role': 'Director'}}
-        for actor in cast:
-            if actor not in nodes:
-                nodes[actor] = {'data': {'id': actor, 'label': actor, 'role': 'Actor'}}
+    # Edges ONLY selected -> collaborator (avoids dense hairballs)
+    for c in top_collabs:
+        elements.append({'data': {'source': selected_name, 'target': c}})
 
-        if director:
-            for actor in cast:
-                edges.append({'data': {'source': director, 'target': actor}})
-        if selected_name in cast:
-            for a in cast:
-                if a != selected_name:
-                    edges.append({'data': {'source': selected_name, 'target': a}})
-
-    if len(nodes) > 60:
-        deg = {}
-        for e in edges:
-            deg[e['data']['source']] = deg.get(e['data']['source'], 0) + 1
-            deg[e['data']['target']] = deg.get(e['data']['target'], 0) + 1
-        keep = {selected_name}
-        keep |= set(sorted(deg, key=lambda k: -deg[k])[:40])
-        nodes = {k:v for k,v in nodes.items() if k in keep}
-        edges = [e for e in edges if e['data']['source'] in keep and e['data']['target'] in keep]
-
-    return list(nodes.values()) + edges
+    return elements
