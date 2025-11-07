@@ -523,28 +523,28 @@ layout = html.Div(
             style={'display': 'flex', 'justifyContent': 'center'}
         ),
 
+        html.Div(
+            [
                 html.Div(
-                    [
-                        html.Div(
-                            html.P(
-                                "Regional Deep dives",
-                                style={
-                                    'flex': '1',
-                                    'margin': '10px',
-                                    'background': 'rgba(30,30,30,0.85)',
-                                    'backdropFilter': 'blur(8px)',
-                                    'borderRadius': '16px',
-                                    'padding': '30px',
-                                    'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
-                                    'textAlign': 'center',
-                                    'font-size': '1.2rem',
-                                    'font-weight': 'bold'
-                                }
-                            ),
-                        )
-                    ],
-                    style={'width': 'full'}
-                ),
+                    html.P(
+                        "Regional Deep dives",
+                        style={
+                            'flex': '1',
+                            'margin': '10px',
+                            'background': 'rgba(30,30,30,0.85)',
+                            'backdropFilter': 'blur(8px)',
+                            'borderRadius': '16px',
+                            'padding': '30px',
+                            'boxShadow': '0 4px 30px rgba(0, 0, 0, 0.4)',
+                            'textAlign': 'center',
+                            'font-size': '1.2rem',
+                            'font-weight': 'bold'
+                        }
+                    ),
+                )
+            ],
+            style={'width': 'full'}
+        ),
         html.Div(
             [
                 html.Div(
